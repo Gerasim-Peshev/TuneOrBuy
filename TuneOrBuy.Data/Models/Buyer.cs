@@ -21,11 +21,6 @@ namespace TuneOrBuy.Data.Models
         [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string LastName { get; set; } = null!;
 
-        [Required]
-        [ForeignKey(nameof(User))]
-        public string UserId { get; set; } = null!;
-        public IdentityUser User { get; set; } = null!;
-
         [StringLength(ImageUrlMaxLength)]
         public virtual string? ImageUrl { get; set; }
 

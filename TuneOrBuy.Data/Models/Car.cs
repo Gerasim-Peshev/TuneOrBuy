@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using static TuneOrBuy.Data.DataConstants.Car;
 
 namespace TuneOrBuy.Data.Models
@@ -14,7 +8,7 @@ namespace TuneOrBuy.Data.Models
     {
         public Car()
         {
-            this.Equipments = new List<string>();
+            this.Equipments = new List<EquipmentAndService>();
         }
 
         [Key]
@@ -72,7 +66,7 @@ namespace TuneOrBuy.Data.Models
         [Required]
         public string NumberOfSeats { get; set; } = null!;
 
-        public virtual IEnumerable<string> Equipments { get; set; }
+        public virtual IEnumerable<EquipmentAndService> Equipments { get; set; }
 
         public string? Description { get; set; }
 

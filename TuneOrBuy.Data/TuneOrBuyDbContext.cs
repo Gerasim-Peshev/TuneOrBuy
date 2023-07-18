@@ -35,6 +35,16 @@ namespace TuneOrBuy.Web.Data
                .HasForeignKey(cs => cs.CarServiceOwnerId)
                .OnDelete(DeleteBehavior.Restrict);
 
+            builder
+               .Entity<Car>()
+               .Property(c => c.Price)
+               .HasPrecision(18, 2);
+
+            builder
+               .Entity<Part>()
+               .Property(p => p.Price)
+               .HasPrecision(18, 2);
+
             base.OnModelCreating(builder);
         }
 

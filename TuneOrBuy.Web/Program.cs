@@ -10,18 +10,27 @@ namespace TuneOrBuy.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration
-                                          .GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<TuneOrBuyDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            var connectionString = builder
+                                  .Configuration
+                                  .GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder
+               .Services
+               .AddDbContext<TuneOrBuyDbContext>(options =>
+                {
+                    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("TuneOrBuy.Data"));
+                });
 
             builder
                .Services
                .AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services
-                   .AddDefaultIdentity<Buyer>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<TuneOrBuyDbContext>();
+            builder
+               .Services
+               .AddDefaultIdentity<Buyer>(options =>
+                { 
+                    options.SignIn.RequireConfirmedAccount = false;
+                })
+               .AddEntityFrameworkStores<TuneOrBuyDbContext>();
 
             builder
                .Services

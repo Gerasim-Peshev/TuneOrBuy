@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static TuneOrBuy.Data.DataConstants.CarService;
 
 namespace TuneOrBuy.Data.Models
@@ -13,7 +8,7 @@ namespace TuneOrBuy.Data.Models
     {
         public CarService()
         {
-            this.Services = new List<string>();
+            this.Services = new List<EquipmentAndService>();
         }
 
         [Key]
@@ -38,7 +33,7 @@ namespace TuneOrBuy.Data.Models
         [RegularExpression(PhoneNumberRegEx)]
         public string PhoneNumber { get; set; } = null!;
 
-        public virtual IEnumerable<string> Services { get; set; }
+        public virtual IEnumerable<EquipmentAndService> Services { get; set; }
 
         [Required]
         public DateTime OpenHour { get; set; }
