@@ -22,4 +22,10 @@
     <ProjectReference Include="..\TuneOrBuy.Services\TuneOrBuy.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Car\" />
+    <Folder Include="Views\CarService\" />
+    <Folder Include="Views\Part\" />
+  </ItemGroup>
+
 </Project>

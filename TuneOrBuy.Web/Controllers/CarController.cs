@@ -4,7 +4,7 @@ namespace TuneOrBuy.Web.Controllers
 {
     public class CarController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> All()
         {
             return View();
         }

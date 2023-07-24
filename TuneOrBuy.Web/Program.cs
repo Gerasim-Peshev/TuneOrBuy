@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using TuneOrBuy.Data.Models;
 using TuneOrBuy.Web.Data;
+using Microsoft.AspNetCore.Identity;
+using TuneOrBuy.Services.CarServiceOwners;
+using TuneOrBuy.Services.Contracts;
+using TuneOrBuy.Services.Sellers;
+using CarService = TuneOrBuy.Services.Cars.CarService;
 
 namespace TuneOrBuy.Web
 {
@@ -29,12 +34,26 @@ namespace TuneOrBuy.Web
                .AddDefaultIdentity<Buyer>(options =>
                 { 
                     options.SignIn.RequireConfirmedAccount = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireDigit = false;
                 })
                .AddEntityFrameworkStores<TuneOrBuyDbContext>();
 
             builder
                .Services
                .AddControllersWithViews();
+
+            builder
+               .Services
+               .AddScoped<ISellerService, SellerService>();
+            builder
+               .Services
+               .AddScoped<ICarService, CarService>();
+            builder
+               .Services
+               .AddScoped<ICarServiceOwner, CarServiceOwnerService>();
 
             var app = builder.Build();
 
@@ -60,8 +79,13 @@ namespace TuneOrBuy.Web
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+                        app.UseAuthentication();;
 
             app.Run();
         }
     }
 }
+
+
+
+
