@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 using static TuneOrBuy.Data.DataConstants.Seller;
 
 namespace TuneOrBuy.Data.Models
@@ -21,8 +22,8 @@ namespace TuneOrBuy.Data.Models
         public Buyer Buyer { get; set; } = null!;
 
         [Required]
-        [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength)]
-        [RegularExpression(PhoneNumberRegEx)]
+        [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength, ErrorMessage = "Phone does not match length")]
+        [RegularExpression(PhoneNumberRegEx, ErrorMessage = "Phone does not match patern")]
         public string PhoneNumber { get; set; } = null!;
 
         [Required]

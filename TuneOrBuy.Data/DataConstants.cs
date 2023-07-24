@@ -20,8 +20,7 @@ namespace TuneOrBuy.Data
         {
             public const int PhoneNumberMinLength = 7;
             public const int PhoneNumberMaxLength = 15;
-            public const string PhoneNumberRegEx = @"^([+]?[\\d]){7,15}$";
-
+            public const string PhoneNumberRegEx = @"^([+]?[\d]){7,15}$";
             public const int ImageUrlMaxLength = 2048;
         }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TuneOrBuy.Web.Data;
 
@@ -11,9 +12,10 @@ using TuneOrBuy.Web.Data;
 namespace TuneOrBuy.Data.Migrations
 {
     [DbContext(typeof(TuneOrBuyDbContext))]
-    partial class TuneOrBuyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230720171155_removeImageUrlFromBuyer")]
+    partial class removeImageUrlFromBuyer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -310,7 +312,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Cars", (string)null);
+                    b.ToTable("Cars");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.CarService", b =>
@@ -350,7 +352,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.HasIndex("TownId");
 
-                    b.ToTable("CarServices", (string)null);
+                    b.ToTable("CarServices");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.CarServiceOwner", b =>
@@ -371,7 +373,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.HasIndex("BuyerId");
 
-                    b.ToTable("CarServiceOwners", (string)null);
+                    b.ToTable("CarServiceOwners");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.EquipmentAndService", b =>
@@ -398,7 +400,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.HasIndex("CarServiceId");
 
-                    b.ToTable("EquipmentAndService", (string)null);
+                    b.ToTable("EquipmentAndService");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.Part", b =>
@@ -438,7 +440,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Parts", (string)null);
+                    b.ToTable("Parts");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.Seller", b =>
@@ -469,7 +471,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.HasIndex("TownId");
 
-                    b.ToTable("Sellers", (string)null);
+                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.Town", b =>
@@ -487,7 +489,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Towns", (string)null);
+                    b.ToTable("Towns");
 
                     b.HasData(
                         new
