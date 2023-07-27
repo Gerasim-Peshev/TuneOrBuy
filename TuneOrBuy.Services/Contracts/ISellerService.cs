@@ -11,6 +11,7 @@ namespace TuneOrBuy.Services.Contracts
     public interface ISellerService
     {
         Task<bool> UserIsSeller(Guid userId);
+        Task<Seller> GetSeller(string userId);
         Task<bool> ExistsById(Guid userId);
         Task<bool> ExistsByPhoneNumber(string phoneNumber);
         Task CreateSeller(Guid userId, string phoneNumber, int townId, string imageUrl);
