@@ -19,9 +19,14 @@ namespace TuneOrBuy.Services.Sellers
             this.context = data;
         }
 
-        public async Task<bool> UserIsSeller(Guid userId)
+        public  async Task<bool> UserIsSeller(Guid userId)
         {
             return await context.Sellers.AnyAsync(s => s.BuyerId == userId);
+        }
+
+        public async Task<Seller> GetSeller(string userId)
+        {
+            return await context.Sellers.FirstAsync(s => s.BuyerId == Guid.Parse(userId));
         }
 
         public async Task<bool> ExistsById(Guid userId)
