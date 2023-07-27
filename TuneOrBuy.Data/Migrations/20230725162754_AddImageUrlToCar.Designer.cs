@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TuneOrBuy.Web.Data;
 
@@ -11,9 +12,10 @@ using TuneOrBuy.Web.Data;
 namespace TuneOrBuy.Data.Migrations
 {
     [DbContext(typeof(TuneOrBuyDbContext))]
-    partial class TuneOrBuyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230725162754_AddImageUrlToCar")]
+    partial class AddImageUrlToCar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -376,6 +378,33 @@ namespace TuneOrBuy.Data.Migrations
                     b.HasIndex("BuyerId");
 
                     b.ToTable("CarServiceOwners");
+                });
+
+            modelBuilder.Entity("TuneOrBuy.Data.Models.EquipmentAndService", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid?>("CarId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CarServiceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("CarServiceId");
+
+                    b.ToTable("EquipmentAndService");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.Part", b =>
@@ -815,6 +844,17 @@ namespace TuneOrBuy.Data.Migrations
                     b.Navigation("Buyer");
                 });
 
+            modelBuilder.Entity("TuneOrBuy.Data.Models.EquipmentAndService", b =>
+                {
+                    b.HasOne("TuneOrBuy.Data.Models.Car", null)
+                        .WithMany("Equipments")
+                        .HasForeignKey("CarId");
+
+                    b.HasOne("TuneOrBuy.Data.Models.CarService", null)
+                        .WithMany("Services")
+                        .HasForeignKey("CarServiceId");
+                });
+
             modelBuilder.Entity("TuneOrBuy.Data.Models.Part", b =>
                 {
                     b.HasOne("TuneOrBuy.Data.Models.Buyer", null)
@@ -854,6 +894,16 @@ namespace TuneOrBuy.Data.Migrations
                     b.Navigation("FavouriteCars");
 
                     b.Navigation("FavouriteParts");
+                });
+
+            modelBuilder.Entity("TuneOrBuy.Data.Models.Car", b =>
+                {
+                    b.Navigation("Equipments");
+                });
+
+            modelBuilder.Entity("TuneOrBuy.Data.Models.CarService", b =>
+                {
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("TuneOrBuy.Data.Models.CarServiceOwner", b =>

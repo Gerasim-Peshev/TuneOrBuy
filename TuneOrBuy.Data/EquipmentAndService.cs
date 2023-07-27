@@ -1,4 +1,4 @@
-﻿namespace TuneOrBuy.Data.Models
+﻿namespace TuneOrBuy.Data
 {
     public class EquipmentAndService
     {

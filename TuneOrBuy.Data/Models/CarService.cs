@@ -8,7 +8,7 @@ namespace TuneOrBuy.Data.Models
     {
         public CarService()
         {
-            this.Services = new List<EquipmentAndService>();
+            this.Services = new List<string>();
         }
 
         [Key]
@@ -33,7 +33,8 @@ namespace TuneOrBuy.Data.Models
         [RegularExpression(PhoneNumberRegEx)]
         public string PhoneNumber { get; set; } = null!;
 
-        public virtual IEnumerable<EquipmentAndService> Services { get; set; }
+        [NotMapped]
+        public virtual IEnumerable<string> Services { get; set; }
 
         [Required]
         public DateTime OpenHour { get; set; }

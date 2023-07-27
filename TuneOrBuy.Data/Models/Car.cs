@@ -8,7 +8,7 @@ namespace TuneOrBuy.Data.Models
     {
         public Car()
         {
-            this.Equipments = new List<EquipmentAndService>();
+            this.Equipments = new List<string>();
         }
 
         [Key]
@@ -52,6 +52,8 @@ namespace TuneOrBuy.Data.Models
         public Guid SellerId { get; set; }
         public Seller Seller { get; set; } = null!;
 
+        public string ImageUrl { get; set; } = null!;
+
         [Required]
         [Display(Name = "Gear")]
         public string GearType { get; set; } = null!;
@@ -66,7 +68,8 @@ namespace TuneOrBuy.Data.Models
         [Required]
         public string NumberOfSeats { get; set; } = null!;
 
-        public virtual IEnumerable<EquipmentAndService> Equipments { get; set; }
+        [NotMapped]
+        public virtual IEnumerable<string> Equipments { get; set; }
 
         public string? Description { get; set; }
 

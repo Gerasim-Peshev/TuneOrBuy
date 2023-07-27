@@ -28,7 +28,7 @@ namespace TuneOrBuy.Data
         {
             public const int PhoneNumberMinLength = 7;
             public const int PhoneNumberMaxLength = 15;
-            public const string PhoneNumberRegEx = @"^([+]?[\\d]){7,15}$";
+            public const string PhoneNumberRegEx = @"^([+]?[\d]){7,15}$";
         }
 
         public class Town
@@ -55,6 +55,8 @@ namespace TuneOrBuy.Data
 
             public const int TraveledDistanceMinValue = 0;
             public const int TraveledDistanceMaxValue = int.MaxValue;
+
+            public const int ImageUrlMaxLength = 2048;
 
             public const int ColorMinLength = 2;
             public const int ColorMaxLength = 20;
