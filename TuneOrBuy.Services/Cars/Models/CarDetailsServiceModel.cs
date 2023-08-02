@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using TuneOrBuy.Data;
 
 namespace TuneOrBuy.Services.Cars.Models
 {
-    public class CarServiceModel
+    public class CarDetailsServiceModel
     {
-        public string Id { get; set; } = null!;
-
         public string Manufacturer { get; set; } = null!;
 
         public string Brand { get; set; } = null!;
@@ -36,7 +30,7 @@ namespace TuneOrBuy.Services.Cars.Models
 
         public string ImageUrl { get; set; } = null!;
 
-        public string SellerId { get; set; } = null!;
+        public TuneOrBuy.Data.Models.Seller Seller { get; set; } = null!;
 
         public string GearType { get; set; } = null!;
 
