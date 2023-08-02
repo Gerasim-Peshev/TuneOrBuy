@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using TuneOrBuy.Data.Models;
+using TuneOrBuy.Services.Cars.Models;
+using TuneOrBuy.Services.Parts.Models;
 
 namespace TuneOrBuy.Services.Contracts
 {
@@ -12,11 +14,14 @@ namespace TuneOrBuy.Services.Contracts
     {
         Task<bool> UserIsSeller(Guid userId);
         Task<Seller> GetSeller(string userId);
+
         Task<bool> ExistsById(Guid userId);
         Task<bool> ExistsByPhoneNumber(string phoneNumber);
         Task CreateSeller(Guid userId, string phoneNumber, int townId, string imageUrl);
         Task<IEnumerable<Town>> GetAllTowns();
         Task<Buyer> GetBuyerAsync(Guid userId);
         Task<Town> GetTownByIdAsync(int townId);
+        Task<List<CarServiceModel>> GetAllCarsForSell(string userId);
+        Task<List<PartServiceModel>> GetAllPartsForSell(string userId);
     }
 }
