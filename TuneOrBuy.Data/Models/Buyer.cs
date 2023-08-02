@@ -21,7 +21,7 @@ namespace TuneOrBuy.Data.Models
         [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string LastName { get; set; } = null!;
 
-        public virtual IEnumerable<Car> FavouriteCars { get; set; }
-        public virtual IEnumerable<Part> FavouriteParts { get; set; }
+        public List<Car> FavouriteCars { get; set; }
+        public List<Part> FavouriteParts { get; set; }
     }
 }

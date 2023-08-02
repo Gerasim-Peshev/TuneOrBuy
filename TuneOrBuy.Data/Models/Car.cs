@@ -8,7 +8,7 @@ namespace TuneOrBuy.Data.Models
     {
         public Car()
         {
-            this.Equipments = new List<string>();
+           
         }
 
         [Key]
@@ -68,8 +68,7 @@ namespace TuneOrBuy.Data.Models
         [Required]
         public string NumberOfSeats { get; set; } = null!;
 
-        [NotMapped]
-        public virtual IEnumerable<string> Equipments { get; set; }
+        public string Equipments { get; set; }
 
         public string? Description { get; set; }
 

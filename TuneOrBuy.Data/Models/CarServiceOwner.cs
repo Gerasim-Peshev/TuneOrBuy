@@ -24,6 +24,6 @@ namespace TuneOrBuy.Data.Models
         [RegularExpression(PhoneNumberRegEx)]
         public string PhoneNumber { get; set; } = null!;
 
-        public IEnumerable<CarService> CarServices { get; set; }
+        public List<CarService> CarServices { get; set; }
     }
 }

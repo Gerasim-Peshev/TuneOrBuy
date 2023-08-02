@@ -35,7 +35,7 @@ namespace TuneOrBuy.Data.Models
         public int TownId { get; set; }
         public Town Town { get; set; } = null!;
 
-        public virtual IEnumerable<Car> CarsForSell { get; set; }
-        public virtual IEnumerable<Part> PartsForSell { get; set; }
+        public List<Car> CarsForSell { get; set; }
+        public List<Part> PartsForSell { get; set; }
     }
 }

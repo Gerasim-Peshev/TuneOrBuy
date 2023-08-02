@@ -34,7 +34,7 @@ namespace TuneOrBuy.Data.Models
         public string PhoneNumber { get; set; } = null!;
 
         [NotMapped]
-        public virtual IEnumerable<string> Services { get; set; }
+        public virtual List<string> Services { get; set; }
 
         [Required]
         public DateTime OpenHour { get; set; }
