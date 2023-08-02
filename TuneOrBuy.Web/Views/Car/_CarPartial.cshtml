@@ -1,0 +1,50 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using TuneOrBuy.Services.Contracts
+@inject ISellerService sellerService;
+@inject ICarService carService;
+@model CarServiceModel
+
+<div class="col-md-4">
+    <div class="card mb-3">
+        <img class="card-img-top" src="@Model.ImageUrl" alt="Car Image">
+        <div class="card-body text-center">
+            <h4>@Model.Manufacturer @Model.Brand</h4>
+            <h6>Year of creation: @Model.Year.Year, Fuel: @Model.Fuel, @Model.TraveledDistance km</h6>
+            <h6>Price: <b>@Model.Price BGN</b></h6>
+            <br />
+            <a asp-controller="Car" asp-action="CarDetails" asp-route-carId="@Model.Id"
+               class="btn btn-success">Details</a>
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                var contains = await carService.ContainsCar(@Model.Id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                if (contains.Item1)
+                {
+                    <a asp-controller="Car" asp-action="CarToFavourite" asp-route-carId="@Model.Id">❤</a>
+                }
+                else if (!contains.Item1)
+                {
+                    <a asp-controller="Car" asp-action="CarToFavourite" asp-route-carId="@Model.Id">♡</a>
+                }
+
+                var UserIsSeller = await sellerService
+                .UserIsSeller(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+
+                if (UserIsSeller)
+                {
+                    var GetUser = await sellerService.GetSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+
+                    if (UserIsSeller && Model.SellerId.ToLower() == GetUser.Id.ToString().ToLower())
+                    {
+                        <a asp-controller="Car" asp-action="EditCar" asp-route-carId="@Model.Id"
+                           class="btn btn-warning">Edit</a>
+                        <a asp-controller="Car" asp-action="DeleteCar" asp-route-carId="@Model.Id"
+                           class="btn btn-danger">Delete</a>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>

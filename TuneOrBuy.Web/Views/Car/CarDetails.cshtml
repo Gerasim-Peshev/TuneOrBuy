@@ -1,0 +1,59 @@
+﻿@model CarDetailsServiceModel
+
+@{
+    ViewBag.Title = "Car Details";
+}
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="container" style="display:inline">
+    <div class="row">
+        <div class="col-12 text-center">
+            <p>@Model.Manufacturer @Model.Brand</p>
+            <p>Year: @Model.Year, First Registration: @Model.FirstRegistrationYear, Body Type: @Model.BodyType</p>
+            <p>Fuel: @Model.Fuel, Traveled Distance: @Model.TraveledDistance, Gears: @Model.GearType, Horse Power: @Model.HorsePower, Number of Doors: @Model.NumberOfDoors, Number of Seats: @Model.NumberOfSeats, Color: @Model.Color</p>
+            @if (@Model.VIN != null)
+            {
+                <p>VIN: @Model.VIN</p>
+            }
+            @if (@Model.ServiceHistory)
+            {
+                <p>Service History: ✓</p>
+            }
+            else
+            {
+                <p>Service History: X</p>
+            }
+        </div>
+        <div class="col-12 text-center">
+            <img class="card-img"
+                 src="@Model.ImageUrl" alt="Car Image">
+        </div>
+        <div class="col-12 row">
+            <div class="col-12">
+                <p>Equipments</p>
+            </div>
+            @foreach (var equip in @Model.Equipments.Split(", "))
+            {
+                <div class="col-2">
+                    <p>@equip ✓</p>
+                </div>
+            }
+        </div>
+        <div class="card col-12 border-0 text-center">
+            <p>Located in: <b>@Model.Seller.Town.Name</b></p>
+            <p>
+                Price:
+                <b>@String.Format("{0:f2}", Model.Price) BGN</b>
+            </p>
+            <p>@Model.Description</p>
+            <p></p>
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Agent Info</h5>
+                    <p class="card-text">Email: @Model.Seller.Buyer.Email</p>
+                    <p class="card-text">Phone Number: @Model.Seller.PhoneNumber</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
