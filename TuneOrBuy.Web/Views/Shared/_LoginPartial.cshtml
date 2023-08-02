@@ -4,31 +4,60 @@
 @using System.Security.Claims
 @inject SignInManager<Buyer> SignInManager
 @inject UserManager<Buyer> UserManager
-@inject ICarServiceOwner CarServiceOwner;
+@inject ICarServiceOwnerService CarServiceOwner;
 @inject ISellerService SellerService;
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         var UserIsSeller = await SellerService
-        .UserIsSeller(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            .UserIsSeller(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
 
         var UserIsCarServiceOwner = await CarServiceOwner
-        .UserIsCarServiceOwner(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            .UserIsCarServiceOwner(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                My
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" asp-controller="Buyer" asp-action="MyCars">My Favourute Cars</a>
+                <a class="dropdown-item" asp-controller="Buyer" asp-action="MyParts">My Favourute Parts</a>
+            </div>
+        </div>
 
         if (!UserIsSeller && !UserIsCarServiceOwner)
         {
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Become
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" asp-controller="Seller" asp-action="Become">Become Seller</a>
+                    <a class="dropdown-item" asp-controller="CarServiceOwner" asp-action="Become">Become Car Service Owner</a>
+                </div>
+            </div>
+        }
+
+        if (UserIsSeller)
+        {
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    For Sell
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" asp-controller="Seller" asp-action="CarsForSell">Cars for sell</a>
+                    <a class="dropdown-item" asp-controller="Seller" asp-action="PartsForSell">Parts for sell</a>
+                </div>
+            </div>
+        }
+        else if (UserIsCarServiceOwner)
+        {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Seller" asp-action="Become">Become Seller</a>
+                <a class="nav-link text-dark" asp-controller="CarServiceOwner" asp-action="MyServices">My Car Services</a>
             </li>
         }
 
-        if (!UserIsCarServiceOwner && !UserIsSeller)
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="CarServiceOwner" asp-action="Become">Become Car Service Owner</a>
-            </li>
-        }
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!.Substring(0, User.Identity.Name.IndexOf("@"))</a>
         </li>
