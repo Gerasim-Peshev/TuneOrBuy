@@ -53,7 +53,7 @@ namespace TuneOrBuy.Web
                .AddScoped<ICarService, CarService>();
             builder
                .Services
-               .AddScoped<ICarServiceOwner, CarServiceOwnerService>();
+               .AddScoped<ICarServiceOwnerService, CarServiceOwnerService>();
 
             var app = builder.Build();
 
