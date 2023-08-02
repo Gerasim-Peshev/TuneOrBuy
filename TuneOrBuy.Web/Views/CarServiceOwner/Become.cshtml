@@ -1,5 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model BecomeCarServiceOwnerViewModel
 @{
+    ViewBag.Title = "Become Car Service Owner";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+@if (!ViewData.ModelState.IsValid && ViewData.ModelState["Error"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewData.ModelState["Error"].Errors.First().ErrorMessage
+    </div>
+}
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control">
+                <span asp-validation-for="PhoneNumber"></span>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary" type="submit" value="Create" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
