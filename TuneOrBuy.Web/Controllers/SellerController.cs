@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using TuneOrBuy.Services.Contracts;
+using TuneOrBuy.Web.Models.Car;
 using TuneOrBuy.Web.Models.Seller;
 
 namespace TuneOrBuy.Web.Controllers
@@ -66,6 +67,20 @@ namespace TuneOrBuy.Web.Controllers
                 sellerToBecome.ImageUrl);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> CarsForSell()
+        {
+            var userId = UserId();
+
+            var carsForSell = await sellerService.GetAllCarsForSell(userId);
+
+            return View(carsForSell);
+        }
+
+        public async Task<IActionResult> PartsForSell()
+        {
+            return View();
         }
     }
 }

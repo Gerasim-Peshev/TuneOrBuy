@@ -15,12 +15,9 @@ namespace TuneOrBuy.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
+            return RedirectToAction("All", "Car");
 
-        public IActionResult Privacy()
-        {
-            return View();
+            //return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
