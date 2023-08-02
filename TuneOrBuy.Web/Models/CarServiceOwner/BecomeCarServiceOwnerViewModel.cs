@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json.Serialization;
 using static TuneOrBuy.Data.DataConstants.CarServiceOwner;
 
 namespace TuneOrBuy.Web.Models.CarServiceOwner
@@ -6,8 +7,10 @@ namespace TuneOrBuy.Web.Models.CarServiceOwner
     public class BecomeCarServiceOwnerViewModel
     {
         [Required]
-        [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength)]
-        [RegularExpression(PhoneNumberRegEx)]
+        [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength, ErrorMessage = "Phone is invalid")]
+        [RegularExpression(PhoneNumberRegEx, ErrorMessage = "Phone is invalid")]
+        [Phone]
+        [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; } = null!;
     }
 }
