@@ -1,17 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TuneOrBuy.Data.Models;
+using TuneOrBuy.Data;
 using static TuneOrBuy.Data.DataConstants.Car;
 
 namespace TuneOrBuy.Web.Models.Car
 {
     public class AddCarViewModel
     {
-        public AddCarViewModel()
-        {
-            this.Equipments = new List<EquipmentAndService>();
-        }
-
         [Required]
         public string Manufacturer { get; set; } = null!;
 
@@ -19,56 +14,74 @@ namespace TuneOrBuy.Web.Models.Car
         public string Brand { get; set; } = null!;
 
         [Required]
+        [Display(Name = "Body type")]
         public string BodyType { get; set; } = null!;
 
-        [StringLength(VINLength, MinimumLength = VINLength)]
+        [StringLength(VINLength, MinimumLength = VINLength, ErrorMessage = "Incorrect VIN")]
         public string? VIN { get; set; }
 
         [Required]
         public string Fuel { get; set; } = null!;
 
         [Required]
-        [Range(HoursePowerMinValue, HoursePowerMaxValue)]
+        [Range(HoursePowerMinValue, HoursePowerMaxValue, ErrorMessage = "Incorrect horse power")]
+        [Display(Name = "Horse Power")]
         public int HorsePower { get; set; }
 
         [Required]
-        public DateTime Year { get; set; }
+        [Display(Name = "Year of car")]
+        public int Year { get; set; }
 
         [Required]
-        public DateTime FirstRegistrationYear { get; set; }
+        [Display(Name = "Year of first registration")]
+        public int FirstRegistrationYear { get; set; }
 
         [Required]
-        [Range(PriceMinValue, PriceMaxValue)]
+        [Range(PriceMinValue, PriceMaxValue, ErrorMessage = "Incorrect price")]
+        [Display(Name = "Price in BGN")]
         public decimal Price { get; set; }
 
         [Required]
-        [Range(TraveledDistanceMinValue, TraveledDistanceMaxValue)]
+        [Range(TraveledDistanceMinValue, TraveledDistanceMaxValue, ErrorMessage = "Incorrect Traveled Distance")]
+        [Display(Name = "Traveled Distance in km")]
         public int TraveledDistance { get; set; }
 
         [Required]
-        [ForeignKey(nameof(Seller))]
-        public Guid SellerId { get; set; }
-        public TuneOrBuy.Data.Models.Seller Seller { get; set; } = null!;
+        [StringLength(ImageUrlMaxLength, ErrorMessage = "Incorrect Car Image")]
+        [Display(Name = "Car Image")]
+        public string ImageUrl { get; set; } = null!;
 
         [Required]
         [Display(Name = "Gear")]
         public string GearType { get; set; } = null!;
 
         [Required]
-        [StringLength(ColorMaxLength, MinimumLength = ColorMinLength)]
+        [StringLength(ColorMaxLength, MinimumLength = ColorMinLength, ErrorMessage = "Incorrect Color")]
         public string Color { get; set; } = null!;
 
         [Required]
+        [Display(Name = "Number of doors")]
         public string NumberOfDoors { get; set; } = null!;
 
         [Required]
+        [Display(Name = "Number of seats")]
         public string NumberOfSeats { get; set; } = null!;
 
-        public virtual IEnumerable<EquipmentAndService> Equipments { get; set; }
+        public virtual List<string> Equipments { get; set; }
 
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength, ErrorMessage = "Incorrect Description")]
         public string? Description { get; set; }
 
         [Required]
-        public bool ServiceHistory { get; set; }
+        [Display(Name = "Service History")]
+        public bool ServiceHistory { get; set; } = false;
+
+        public IEnumerable<EquipmentAndService>? Manufactures { get; set; }
+        public IEnumerable<EquipmentAndService>? BodyTypes { get; set; }
+        public IEnumerable<EquipmentAndService>? Fuels { get; set; }
+        public IEnumerable<EquipmentAndService>? GearTypes { get; set; }
+        public IEnumerable<EquipmentAndService>? NumbersOfDoors { get; set; }
+        public IEnumerable<EquipmentAndService>? NumbersOfSeats { get; set; }
+        public IEnumerable<CheckBoxOption>? EquipmentsToChooseFrom { get; set; }
     }
 }
