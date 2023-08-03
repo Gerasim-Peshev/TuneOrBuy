@@ -202,6 +202,7 @@ namespace TuneOrBuy.Services.Parts
                              .Select(fp => new PartServiceModel()
                               {
                                   Id = fp.Id.ToString().ToLower(),
+                                  Name = fp.Name,
                                   Manufacturer = fp.Manufacturer,
                                   Brand = fp.Brand,
                                   Year = fp.Year,
