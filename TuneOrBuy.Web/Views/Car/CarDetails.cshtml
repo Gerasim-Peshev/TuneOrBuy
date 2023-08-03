@@ -9,8 +9,8 @@
     <div class="row">
         <div class="col-12 text-center">
             <p>@Model.Manufacturer @Model.Brand</p>
-            <p>Year: @Model.Year, First Registration: @Model.FirstRegistrationYear, Body Type: @Model.BodyType</p>
-            <p>Fuel: @Model.Fuel, Traveled Distance: @Model.TraveledDistance, Gears: @Model.GearType, Horse Power: @Model.HorsePower, Number of Doors: @Model.NumberOfDoors, Number of Seats: @Model.NumberOfSeats, Color: @Model.Color</p>
+            <p>Year: @Model.Year.Year, First Registration: @Model.FirstRegistrationYear.Year, Body Type: @Model.BodyType</p>
+            <p>Fuel: @Model.Fuel, Traveled Distance: @Model.TraveledDistance km, Gears: @Model.GearType, Horse Power: @Model.HorsePower, Number of Doors: @Model.NumberOfDoors, Number of Seats: @Model.NumberOfSeats, Color: @Model.Color</p>
             @if (@Model.VIN != null)
             {
                 <p>VIN: @Model.VIN</p>
@@ -28,15 +28,22 @@
             <img class="card-img"
                  src="@Model.ImageUrl" alt="Car Image">
         </div>
-        <div class="col-12 row">
+        <div class="col-12 row text-center">
             <div class="col-12">
                 <p>Equipments</p>
             </div>
-            @foreach (var equip in @Model.Equipments.Split(", "))
+            @if (@Model.Equipments != "")
             {
-                <div class="col-2">
-                    <p>@equip ✓</p>
-                </div>
+                @foreach (var equip in @Model.Equipments.Split(", "))
+                {
+                    <div class="col-2">
+                        <p>@equip ✓</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No Equipments</p>
             }
         </div>
         <div class="card col-12 border-0 text-center">
@@ -47,12 +54,13 @@
             </p>
             <p>@Model.Description</p>
             <p></p>
-            <div class="card text-center" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Agent Info</h5>
-                    <p class="card-text">Email: @Model.Seller.Buyer.Email</p>
-                    <p class="card-text">Phone Number: @Model.Seller.PhoneNumber</p>
-                </div>
+        </div>
+        <div class="col-5"></div>
+        <div class="card col-2">
+            <div class="card-body">
+                <h5 class="card-title">Seller Info</h5>
+                <p class="card-text">Email: @Model.Seller.Buyer.Email</p>
+                <p class="card-text">Phone Number: @Model.Seller.PhoneNumber</p>
             </div>
         </div>
     </div>

@@ -42,6 +42,7 @@ namespace TuneOrBuy.Data.Models
         [Required]
         public DateTime CloseHour { get; set; }
 
+        [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength, ErrorMessage = "Incorrect description")]
         public string? Description { get; set; } = null!;
     }
 }

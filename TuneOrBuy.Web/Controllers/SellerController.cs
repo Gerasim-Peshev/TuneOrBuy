@@ -80,7 +80,11 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<IActionResult> PartsForSell()
         {
-            return View();
+            var userId = UserId();
+
+            var partsForSell = await sellerService.GetAllPartsForSell(userId);
+
+            return View(partsForSell);
         }
     }
 }

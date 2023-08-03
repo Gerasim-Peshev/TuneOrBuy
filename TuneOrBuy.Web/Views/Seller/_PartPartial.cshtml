@@ -1,0 +1,49 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using TuneOrBuy.Services.Contracts
+@inject ISellerService sellerService;
+@inject IPartService partService;
+@model PartServiceModel
+
+<div class="col-md-4">
+    <div class="card mb-3">
+        <img class="card-img-top" src="@Model.ImageUrl" alt="Part Image">
+        <div class="card-body text-center">
+            <h4>@Model.Name</h4>
+            <h6>Price: <b>@Model.Price BGN</b></h6>
+            <br />
+            <a asp-controller="Part" asp-action="PartDetails" asp-route-partId="@Model.Id"
+               class="btn btn-success">Details</a>
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                var contains = await partService.ContainsPart(@Model.Id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                if (contains.Item1)
+                {
+                    <a asp-controller="Part" asp-action="PartToFavourite" asp-route-partId="@Model.Id">❤</a>
+                }
+                else if (!contains.Item1)
+                {
+                    <a asp-controller="Part" asp-action="PartToFavourite" asp-route-partId="@Model.Id">♡</a>
+                }
+
+                var UserIsSeller = await sellerService
+                .UserIsSeller(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+
+                if (UserIsSeller)
+                {
+                    var GetUser = await sellerService.GetSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+
+                    if (UserIsSeller && Model.SellerId.ToLower() == GetUser.Id.ToString().ToLower())
+                    {
+                        <a asp-controller="Part" asp-action="EditPart" asp-route-partId="@Model.Id"
+                           class="btn btn-warning">Edit</a>
+                        <a asp-controller="Part" asp-action="DeletePart" asp-route-partId="@Model.Id"
+                           class="btn btn-danger">Delete</a>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>

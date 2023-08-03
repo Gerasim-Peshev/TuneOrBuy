@@ -100,46 +100,7 @@ namespace TuneOrBuy.Services.Cars
             return cars;
         }
 
-        public async Task<List<CarServiceModel>> MyCarsAsync(string userId)
-        {
-            var seller = await GetSellerByBuyerIdAsync(userId);
-
-            var buyer = await context.Users
-                                     .FirstAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
-
-            var cars = buyer.FavouriteCars
-                            .Select(fc => new CarServiceModel()
-                             {
-                                 Id = fc.Id.ToString().ToLower(),
-                                 Manufacturer = fc.Manufacturer,
-                                 Brand = fc.Brand,
-                                 VIN = fc.VIN,
-                                 BodyType = fc.BodyType,
-                                 Fuel = fc.Fuel,
-                                 HorsePower = fc.HorsePower,
-                                 Year = fc.Year,
-                                 FirstRegistrationYear = fc.FirstRegistrationYear,
-                                 Price = fc.Price,
-                                 TraveledDistance = fc.TraveledDistance,
-                                 ImageUrl = fc.ImageUrl,
-                                 SellerId = fc.SellerId.ToString(),
-                                 GearType = fc.GearType,
-                                 Color = fc.Color,
-                                 NumberOfDoors = fc.NumberOfDoors,
-                                 NumberOfSeats = fc.NumberOfSeats,
-                                 Equipments = fc.Equipments,
-                                 Description = fc.Description,
-                                 ServiceHistory = fc.ServiceHistory
-                             })
-                            .ToList();
-
-            if (cars == null)
-            {
-                return new List<CarServiceModel>();
-            }
-
-            return cars;
-        }
+        
 
         public async Task ToFavouriteCars(string carId, string userId)
         {
@@ -169,6 +130,53 @@ namespace TuneOrBuy.Services.Cars
 
             return new Tuple<bool, Buyer, Car>(
                 buyer.FavouriteCars.Any(c => c.Id.ToString().ToLower() == carId.ToLower()), buyer, car);
+        }
+
+        public async Task<List<CarServiceModel>> MyFavoriteCarsAsync(string userId)
+        {
+            var cars = new List<Car>();
+
+            foreach (var car in await context.Cars.ToListAsync())
+            {
+                var contains = await ContainsCar(car.Id.ToString(), userId);
+                if (contains.Item1)
+                {
+                    cars.Add(car);
+                }
+            }
+
+            var carsToReturn = cars
+                            .Select(fc => new CarServiceModel()
+                             {
+                                 Id = fc.Id.ToString().ToLower(),
+                                 Manufacturer = fc.Manufacturer,
+                                 Brand = fc.Brand,
+                                 VIN = fc.VIN,
+                                 BodyType = fc.BodyType,
+                                 Fuel = fc.Fuel,
+                                 HorsePower = fc.HorsePower,
+                                 Year = fc.Year,
+                                 FirstRegistrationYear = fc.FirstRegistrationYear,
+                                 Price = fc.Price,
+                                 TraveledDistance = fc.TraveledDistance,
+                                 ImageUrl = fc.ImageUrl,
+                                 SellerId = fc.SellerId.ToString(),
+                                 GearType = fc.GearType,
+                                 Color = fc.Color,
+                                 NumberOfDoors = fc.NumberOfDoors,
+                                 NumberOfSeats = fc.NumberOfSeats,
+                                 Equipments = fc.Equipments,
+                                 Description = fc.Description,
+                                 ServiceHistory = fc.ServiceHistory
+                             })
+                            .ToList();
+
+            if (carsToReturn == null)
+            {
+                return new List<CarServiceModel>();
+            }
+
+            return carsToReturn;
         }
 
         public async Task CreateCarAsync(string manufacturer, string brand, string bodyType, string vin, string fuel, int horsePower,

@@ -3,7 +3,9 @@ using TuneOrBuy.Data.Models;
 using TuneOrBuy.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using TuneOrBuy.Services.CarServiceOwners;
+using TuneOrBuy.Services.CarServices;
 using TuneOrBuy.Services.Contracts;
+using TuneOrBuy.Services.Parts;
 using TuneOrBuy.Services.Sellers;
 using CarService = TuneOrBuy.Services.Cars.CarService;
 
@@ -54,6 +56,12 @@ namespace TuneOrBuy.Web
             builder
                .Services
                .AddScoped<ICarServiceOwnerService, CarServiceOwnerService>();
+            builder
+               .Services
+               .AddScoped<IPartService, PartService>();
+            builder
+               .Services
+               .AddScoped<ICarServiceService, CarServiceService>();
 
             var app = builder.Build();
 

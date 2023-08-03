@@ -1,5 +1,6 @@
 ﻿using TuneOrBuy.Data.Models;
 using TuneOrBuy.Services.Cars.Models;
+using TuneOrBuy.Services.Parts.Models;
 
 namespace TuneOrBuy.Services.Contracts
 {
@@ -13,16 +14,13 @@ namespace TuneOrBuy.Services.Contracts
         Task<List<CarServiceModel>> AllCarsAsync();
         Task CreateCarAsync(string manufacturer, string brand, string bodyType, string vin, string fuel, int horsePower, int year, int firstRegistrationYear, decimal price, int traveledDistance, string sellerId, string imageUrl, string gearType, string color, string numberOfDoors, string numberOfSeats, List<string> equipments, string description, bool serviceHistory);
         Task<CarDetailsServiceModel> CarDetailsByIdAsync(string carId);
-
         Task EditCarAsync(string id, string manufacturer, string brand, string bodyType, string vin, string fuel, int horsePower,
-                       int year, int firstRegistrationYear, decimal price, int traveledDistance,
-                       string sellerId, string imageUrl, string gearType, string color, string numberOfDoors, string numberOfSeats,
-                       string equipments, string description, bool serviceHistory);
-
+                          int year, int firstRegistrationYear, decimal price, int traveledDistance,
+                          string sellerId, string imageUrl, string gearType, string color, string numberOfDoors, string numberOfSeats,
+                          string equipments, string description, bool serviceHistory);
         Task DeleteCar(string  carId);
-
-        Task<List<CarServiceModel>> MyCarsAsync(string userId);
         Task ToFavouriteCars(string carId, string userId);
         Task<Tuple<bool, Buyer, Car>> ContainsCar(string carId, string userId);
+        Task<List<CarServiceModel>> MyFavoriteCarsAsync(string userId);
     }
 }

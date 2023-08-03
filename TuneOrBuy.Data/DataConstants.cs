@@ -12,8 +12,6 @@ namespace TuneOrBuy.Data
         {
             public const int NameMinLength = 2;
             public const int NameMaxLength = 50;
-
-            public const int ImageUrlMaxLength = 2048;
         }
 
         public class Seller
@@ -21,6 +19,7 @@ namespace TuneOrBuy.Data
             public const int PhoneNumberMinLength = 7;
             public const int PhoneNumberMaxLength = 15;
             public const string PhoneNumberRegEx = @"^([+]?[\d]){7,15}$";
+
             public const int ImageUrlMaxLength = 2048;
         }
 
@@ -35,12 +34,6 @@ namespace TuneOrBuy.Data
         {
             public const int NameMinLength = 2;
             public const int NameMaxLength = 176;
-
-            public const int RegionMinLength = 2;
-            public const int RegionMaxLength = 85;
-
-            public const int CountryMinLength = 2;
-            public const int CountryMaxLength = 56;
         }
 
         public class Car
@@ -72,6 +65,11 @@ namespace TuneOrBuy.Data
 
             public const int PriceMinValue = 0;
             public const int PriceMaxValue = int.MaxValue;
+
+            public const int DescriptionMinLength = 2;
+            public const int DescriptionMaxLength = 2000;
+
+            public const int ImageUrlMaxLength = 2048;
         }
 
         public class CarService

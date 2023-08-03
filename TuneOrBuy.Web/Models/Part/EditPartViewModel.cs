@@ -1,15 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using TuneOrBuy.Data.Migrations;
+using TuneOrBuy.Data;
 using static TuneOrBuy.Data.DataConstants.Part;
 
-namespace TuneOrBuy.Data.Models
+namespace TuneOrBuy.Web.Models.Part
 {
-    public class Part
+    public class EditPartViewModel
     {
-        [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; } = null!;
 
         [Required]
         [StringLength(NameMaxLength, MinimumLength = NameMinLength, ErrorMessage = "Incorrect name")]
@@ -22,7 +19,7 @@ namespace TuneOrBuy.Data.Models
         public string Brand { get; set; } = null!;
 
         [Required]
-        public DateTime Year { get; set; }
+        public int Year { get; set; }
 
         [Required]
         [Range(PriceMinValue, PriceMaxValue, ErrorMessage = "Incorrect price")]
@@ -35,9 +32,8 @@ namespace TuneOrBuy.Data.Models
         [StringLength(ImageUrlMaxLength, MinimumLength = 0, ErrorMessage = "Incorrect image")]
         public string ImageUrl { get; set; } = null!;
 
-        [Required]
-        [ForeignKey(nameof(Seller))]
-        public Guid SellerId { get; set; }
-        public Seller Seller { get; set; } = null!;
+        public string SellerId { get; set; } = null!;
+
+        public IEnumerable<EquipmentAndService>? Manufactures { get; set; }
     }
 }

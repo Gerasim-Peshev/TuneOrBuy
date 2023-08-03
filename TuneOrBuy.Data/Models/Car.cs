@@ -6,11 +6,6 @@ namespace TuneOrBuy.Data.Models
 {
     public class Car
     {
-        public Car()
-        {
-           
-        }
-
         [Key]
         public Guid Id { get; set; }
 

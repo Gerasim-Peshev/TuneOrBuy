@@ -110,7 +110,7 @@ namespace TuneOrBuy.Web.Controllers
         {
             if (!ModelState.IsValid && editedCar.Year <= editedCar.FirstRegistrationYear)
             {
-                return View(editedCar);
+                return View(CreateEditCarViewModel(editedCar));
             }
 
             await carService.EditCarAsync(editedCar.Id, editedCar.Manufacturer, editedCar.Brand, editedCar.BodyType,
@@ -137,6 +137,12 @@ namespace TuneOrBuy.Web.Controllers
             await carService.ToFavouriteCars(carId, userId);
 
             return RedirectToAction("All", "Car");
+        }
+
+        public async Task<IActionResult> MyCars()
+        {
+            var favoriteCars = await carService.MyFavoriteCarsAsync(UserId());
+            return View(favoriteCars);
         }
 
         private AddCarViewModel CreateAddCarViewModel(AddCarViewModel viewToReturn)
