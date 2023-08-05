@@ -24,7 +24,7 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<bool> UserIsCarServiceOwner()
         {
-            return await carServiceOwnerService.UserIsCarServiceOwner(Guid.Parse(UserId()));
+            return await carServiceOwnerService.UserIsCarServiceOwner(UserId());
         }
 
         [HttpGet]
@@ -38,7 +38,7 @@ namespace TuneOrBuy.Web.Controllers
         {
             var userId = UserId();
 
-            if (await carServiceOwnerService.ExistsById(Guid.Parse((ReadOnlySpan<char>)userId)))
+            if (await carServiceOwnerService.ExistsById(userId))
             {
                 return BadRequest();
             }
@@ -53,9 +53,7 @@ namespace TuneOrBuy.Web.Controllers
                 return View(carServiceOwnerToBecome);
             }
 
-            await carServiceOwnerService.CreateSeller(
-                Guid.Parse((ReadOnlySpan<char>)userId),
-                carServiceOwnerToBecome.PhoneNumber);
+            await carServiceOwnerService.CreateCarServiceOwner(userId, carServiceOwnerToBecome.PhoneNumber);
 
             return RedirectToAction("Index", "Home");
         }

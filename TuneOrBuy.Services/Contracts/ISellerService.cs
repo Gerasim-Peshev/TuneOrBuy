@@ -12,14 +12,14 @@ namespace TuneOrBuy.Services.Contracts
 {
     public interface ISellerService
     {
-        Task<bool> UserIsSeller(Guid userId);
+        Task<bool> UserIsSeller(string userId);
         Task<Seller> GetSeller(string userId);
 
-        Task<bool> ExistsById(Guid userId);
+        Task<bool> ExistsById(string userId);
         Task<bool> ExistsByPhoneNumber(string phoneNumber);
-        Task CreateSeller(Guid userId, string phoneNumber, int townId, string imageUrl);
+        Task CreateSeller(string userId, string phoneNumber, int townId, string imageUrl);
         Task<IEnumerable<Town>> GetAllTowns();
-        Task<Buyer> GetBuyerAsync(Guid userId);
+        Task<Buyer> GetBuyerAsync(string userId);
         Task<Town> GetTownByIdAsync(int townId);
         Task<List<CarServiceModel>> GetAllCarsForSell(string userId);
         Task<List<PartServiceModel>> GetAllPartsForSell(string userId);

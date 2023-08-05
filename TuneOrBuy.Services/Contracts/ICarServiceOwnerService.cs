@@ -9,10 +9,13 @@ namespace TuneOrBuy.Services.Contracts
 {
     public interface ICarServiceOwnerService
     {
-        Task<bool> UserIsCarServiceOwner(Guid userId);
-        Task<bool> ExistsById(Guid userId);
+        Task<bool> UserIsCarServiceOwner(string userId);
+        Task<CarServiceOwner> GetCarServiceOwner(string userId);
+
+
+        Task<bool> ExistsById(string userId);
         Task<bool> ExistsByPhoneNumber(string phoneNumber);
-        Task CreateSeller(Guid userId, string phoneNumber);
-        Task<Buyer> GetBuyerAsync(Guid userId);
+        Task CreateCarServiceOwner(string userId, string phoneNumber);
+        Task<Buyer> GetBuyerAsync(string userId);
     }
 }

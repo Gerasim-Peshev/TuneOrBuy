@@ -23,7 +23,7 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<bool> UserIsSeller()
         {
-           return await sellerService.UserIsSeller(Guid.Parse(UserId()));
+           return await sellerService.UserIsSeller(UserId());
         }
 
         [HttpGet]
@@ -44,7 +44,7 @@ namespace TuneOrBuy.Web.Controllers
         {
             var userId = UserId();
 
-            if (await sellerService.ExistsById(Guid.Parse((ReadOnlySpan<char>) userId)))
+            if (await sellerService.ExistsById(userId))
             {
                 return BadRequest();
             }
@@ -61,7 +61,7 @@ namespace TuneOrBuy.Web.Controllers
             }
 
             await sellerService.CreateSeller(
-                Guid.Parse((ReadOnlySpan<char>)userId), 
+                userId, 
                 sellerToBecome.PhoneNumber, 
                 sellerToBecome.TownId,
                 sellerToBecome.ImageUrl);

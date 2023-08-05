@@ -75,7 +75,7 @@ namespace TuneOrBuy.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditCar(string carId)
         {
-            var car = await carService.GetCar(carId);
+            var car = await carService.GetCarAsync(carId);
 
             var modelToReturn = new EditCarViewModel()
             {
@@ -125,7 +125,7 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<IActionResult> DeleteCar(string carId)
         {
-            await carService.DeleteCar(carId);
+            await carService.DeleteCarAsync(carId);
 
             return RedirectToAction("All", "Car");
         }
@@ -134,7 +134,7 @@ namespace TuneOrBuy.Web.Controllers
         {
             var userId = UserId();
 
-            await carService.ToFavouriteCars(carId, userId);
+            await carService.ToFavouriteCarsAsync(carId, userId);
 
             return RedirectToAction("All", "Car");
         }
