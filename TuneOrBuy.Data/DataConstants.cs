@@ -81,6 +81,11 @@ namespace TuneOrBuy.Data
             public const int PhoneNumberMaxLength = 15;
             public const string PhoneNumberRegEx = @"^([+]?[\\d]){7,15}$";
 
+            public const int HourMin = 0;
+            public const int HourMax = 23;
+
+            public const int ImageUrlMaxLength = 2048;
+
             public const int DescriptionMinLength = 2;
             public const int DescriptionMaxLength = 2000;
         }
