@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TuneOrBuy.Data.Models;
+
 
 namespace TuneOrBuy.Services.Cars.Models
 {
@@ -30,7 +27,7 @@ namespace TuneOrBuy.Services.Cars.Models
 
         public string ImageUrl { get; set; } = null!;
 
-        public TuneOrBuy.Data.Models.Seller Seller { get; set; } = null!;
+        public Seller Seller { get; set; } = null!;
 
         public string GearType { get; set; } = null!;
 

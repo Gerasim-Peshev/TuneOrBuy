@@ -35,7 +35,7 @@ namespace TuneOrBuy.Services.Cars
             return await context.Towns.FirstAsync(t => t.Id == townId);
         }
 
-        public async Task<CarServiceModel> GetCar(string carId)
+        public async Task<CarServiceModel> GetCarAsync(string carId)
         {
             var car = await context.Cars.FirstAsync(c => c.Id == Guid.Parse(carId));
 
@@ -68,28 +68,28 @@ namespace TuneOrBuy.Services.Cars
         {
             var cars = await context.Cars
                                     .Select(c => new CarServiceModel()
-                                 {
-                                     Id = c.Id.ToString(),
-                                     Manufacturer = c.Manufacturer,
-                                     Brand = c.Brand,
-                                     VIN = c.VIN,
-                                     BodyType = c.BodyType,
-                                     Fuel = c.Fuel,
-                                     HorsePower = c.HorsePower,
-                                     Year = c.Year,
-                                     FirstRegistrationYear = c.FirstRegistrationYear,
-                                     Price = c.Price,
-                                     TraveledDistance = c.TraveledDistance,
-                                     ImageUrl = c.ImageUrl,
-                                     SellerId = c.SellerId.ToString(),
-                                     GearType = c.GearType,
-                                     Color = c.Color,
-                                     NumberOfDoors = c.NumberOfDoors,
-                                     NumberOfSeats = c.NumberOfSeats,
-                                     Equipments = c.Equipments,
-                                     Description = c.Description,
-                                     ServiceHistory = c.ServiceHistory
-                                 })
+                                    {
+                                        Id = c.Id.ToString(),
+                                        Manufacturer = c.Manufacturer,
+                                        Brand = c.Brand,
+                                        VIN = c.VIN,
+                                        BodyType = c.BodyType,
+                                        Fuel = c.Fuel,
+                                        HorsePower = c.HorsePower,
+                                        Year = c.Year,
+                                        FirstRegistrationYear = c.FirstRegistrationYear,
+                                        Price = c.Price,
+                                        TraveledDistance = c.TraveledDistance,
+                                        ImageUrl = c.ImageUrl,
+                                        SellerId = c.SellerId.ToString(),
+                                        GearType = c.GearType,
+                                        Color = c.Color,
+                                        NumberOfDoors = c.NumberOfDoors,
+                                        NumberOfSeats = c.NumberOfSeats,
+                                        Equipments = c.Equipments,
+                                        Description = c.Description,
+                                        ServiceHistory = c.ServiceHistory
+                                    })
                                 .ToListAsync();
 
             if (cars == null)
@@ -100,19 +100,19 @@ namespace TuneOrBuy.Services.Cars
             return cars;
         }
 
-        
 
-        public async Task ToFavouriteCars(string carId, string userId)
+
+        public async Task ToFavouriteCarsAsync(string carId, string userId)
         {
             var buyer = await context.Users.FirstAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
 
-            var contains = await ContainsCar(carId, userId);
+            var contains = await ContainsCarAsync(carId, userId);
 
             if (!contains.Item1)
             {
                 buyer.FavouriteCars.Add(contains.Item3);
             }
-            else if(contains.Item1)
+            else if (contains.Item1)
             {
                 buyer.FavouriteCars.Remove(contains.Item3);
             }
@@ -120,7 +120,7 @@ namespace TuneOrBuy.Services.Cars
             await context.SaveChangesAsync();
         }
 
-        public async Task<Tuple<bool, Buyer, Car>> ContainsCar(string carId, string userId)
+        public async Task<Tuple<bool, Buyer, Car>> ContainsCarAsync(string carId, string userId)
         {
             var car = await context.Cars
                                    .FirstAsync(c => c.Id.ToString().ToLower() == carId.ToLower());
@@ -138,7 +138,7 @@ namespace TuneOrBuy.Services.Cars
 
             foreach (var car in await context.Cars.ToListAsync())
             {
-                var contains = await ContainsCar(car.Id.ToString(), userId);
+                var contains = await ContainsCarAsync(car.Id.ToString(), userId);
                 if (contains.Item1)
                 {
                     cars.Add(car);
@@ -147,28 +147,28 @@ namespace TuneOrBuy.Services.Cars
 
             var carsToReturn = cars
                             .Select(fc => new CarServiceModel()
-                             {
-                                 Id = fc.Id.ToString().ToLower(),
-                                 Manufacturer = fc.Manufacturer,
-                                 Brand = fc.Brand,
-                                 VIN = fc.VIN,
-                                 BodyType = fc.BodyType,
-                                 Fuel = fc.Fuel,
-                                 HorsePower = fc.HorsePower,
-                                 Year = fc.Year,
-                                 FirstRegistrationYear = fc.FirstRegistrationYear,
-                                 Price = fc.Price,
-                                 TraveledDistance = fc.TraveledDistance,
-                                 ImageUrl = fc.ImageUrl,
-                                 SellerId = fc.SellerId.ToString(),
-                                 GearType = fc.GearType,
-                                 Color = fc.Color,
-                                 NumberOfDoors = fc.NumberOfDoors,
-                                 NumberOfSeats = fc.NumberOfSeats,
-                                 Equipments = fc.Equipments,
-                                 Description = fc.Description,
-                                 ServiceHistory = fc.ServiceHistory
-                             })
+                            {
+                                Id = fc.Id.ToString().ToLower(),
+                                Manufacturer = fc.Manufacturer,
+                                Brand = fc.Brand,
+                                VIN = fc.VIN,
+                                BodyType = fc.BodyType,
+                                Fuel = fc.Fuel,
+                                HorsePower = fc.HorsePower,
+                                Year = fc.Year,
+                                FirstRegistrationYear = fc.FirstRegistrationYear,
+                                Price = fc.Price,
+                                TraveledDistance = fc.TraveledDistance,
+                                ImageUrl = fc.ImageUrl,
+                                SellerId = fc.SellerId.ToString(),
+                                GearType = fc.GearType,
+                                Color = fc.Color,
+                                NumberOfDoors = fc.NumberOfDoors,
+                                NumberOfSeats = fc.NumberOfSeats,
+                                Equipments = fc.Equipments,
+                                Description = fc.Description,
+                                ServiceHistory = fc.ServiceHistory
+                            })
                             .ToList();
 
             if (carsToReturn == null)
@@ -269,7 +269,7 @@ namespace TuneOrBuy.Services.Cars
             car.FirstRegistrationYear = DateTime.Parse($"01/01/{firstRegistrationYear}");
             car.Price = price;
             car.TraveledDistance = traveledDistance;
-            car.SellerId = Guid.Parse((ReadOnlySpan<char>) sellerId);
+            car.SellerId = Guid.Parse((ReadOnlySpan<char>)sellerId);
             car.ImageUrl = imageUrl;
             car.GearType = gearType;
             car.Color = color;
@@ -282,7 +282,7 @@ namespace TuneOrBuy.Services.Cars
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteCar(string carId)
+        public async Task DeleteCarAsync(string carId)
         {
             var car = await context.Cars.FirstAsync(c => c.Id.ToString().ToLower() == carId.ToLower());
 
