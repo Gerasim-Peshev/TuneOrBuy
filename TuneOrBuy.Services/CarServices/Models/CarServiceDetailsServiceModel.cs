@@ -6,23 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TuneOrBuy.Data.Models;
-using static TuneOrBuy.Data.DataConstants.CarService;
 
 namespace TuneOrBuy.Services.CarServices.Models
 {
-    public class CarServiceServiceModel
+    public class CarServiceDetailsServiceModel
     {
-        public string Id { get; set; }
-
         public string Name { get; set; } = null!;
-
-        public string CarServiceOwnerId { get; set; }
+        public CarServiceOwner CarServiceOwner { get; set; } = null!;
 
         public string Address { get; set; } = null!;
 
-        public int TownId { get; set; }
-
-        public Town Town { get; set; }
+        public Town Town { get; set; } = null!;
 
         public string PhoneNumber { get; set; } = null!;
 
