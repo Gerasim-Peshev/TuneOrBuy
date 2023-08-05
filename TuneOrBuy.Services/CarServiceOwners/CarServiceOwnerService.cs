@@ -14,21 +14,25 @@ namespace TuneOrBuy.Services.CarServiceOwners
     public class CarServiceOwnerService : ICarServiceOwnerService
     {
         private readonly TuneOrBuyDbContext context;
-        private ICarServiceOwnerService _carServiceOwnerImplementation;
 
         public CarServiceOwnerService(TuneOrBuyDbContext data)
         {
             this.context = data;
         }
 
-        public async Task<bool> UserIsCarServiceOwner(Guid userId)
+        public async Task<bool> UserIsCarServiceOwner(string userId)
         {
-            return await context.CarServiceOwners.AnyAsync(c => c.BuyerId == userId);
+            return await context.CarServiceOwners.AnyAsync(c => c.BuyerId.ToString().ToLower() == userId.ToLower());
         }
 
-        public async Task<bool> ExistsById(Guid userId)
+        public async Task<CarServiceOwner> GetCarServiceOwner(string userId)
         {
-            return await context.CarServiceOwners.AnyAsync(c => c.BuyerId == userId);
+            return await context.CarServiceOwners.FirstAsync(cso => cso.BuyerId.ToString().ToLower() == userId.ToLower());
+        }
+
+        public async Task<bool> ExistsById(string userId)
+        {
+            return await context.CarServiceOwners.AnyAsync(c => c.BuyerId.ToString().ToLower() == userId.ToLower());
         }
 
         public async Task<bool> ExistsByPhoneNumber(string phoneNumber)
@@ -36,11 +40,11 @@ namespace TuneOrBuy.Services.CarServiceOwners
             return await context.CarServiceOwners.AnyAsync(c => c.PhoneNumber == phoneNumber);
         }
 
-        public async Task CreateSeller(Guid userId, string phoneNumber)
+        public async Task CreateCarServiceOwner(string userId, string phoneNumber)
         {
             var carServiceOwnerToAdd = new CarServiceOwner()
             {
-                BuyerId = userId,
+                BuyerId = Guid.Parse(userId),
                 Buyer = await GetBuyerAsync(userId),
                 PhoneNumber = phoneNumber
             };
@@ -49,9 +53,9 @@ namespace TuneOrBuy.Services.CarServiceOwners
             await context.SaveChangesAsync();
         }
 
-        public async Task<Buyer> GetBuyerAsync(Guid userId)
+        public async Task<Buyer> GetBuyerAsync(string userId)
         {
-            return await context.Users.FirstAsync(u => u.Id == userId);
+            return await context.Users.FirstAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
         }
     }
 }
