@@ -1,0 +1,94 @@
+﻿@model EditCarServiceViewModel
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form method="post">
+            <div class="form-group visually-hidden">
+                <label asp-for="Id"></label>
+                <input asp-for="Id" class="form-control" type="text" />
+                <span asp-validation-for="Id" class="small text-danger"></span>
+            </div>
+            <div class="form-group visually-hidden">
+                <label asp-for="CarServiceOwnerId"></label>
+                <input asp-for="CarServiceOwnerId" class="form-control" type="text" />
+                <span asp-validation-for="CarServiceOwnerId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" type="text" value="@Model.Name"/>
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <input asp-for="Address" class="form-control" type="text" />
+                <span asp-validation-for="Address" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TownId"></label>
+                <select asp-for="TownId" class="form-control">
+                    @foreach (var town in Model.Towns)
+                    {
+                        <option value="@town.Id">@town.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="TownId"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" type="text">
+                <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OpenHour"></label>
+                <input asp-for="OpenHour" class="form-control" type="number">
+                <span asp-validation-for="OpenHour" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CloseHour"></label>
+                <input asp-for="CloseHour" class="form-control" type="number">
+                <span asp-validation-for="CloseHour" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl"></label>
+                <input asp-for="ImageUrl" class="form-control" type="text">
+                <span asp-validation-for="ImageUrl" class="small text-danger"></span>
+            </div>
+            <div class="row">
+                <label asp-for="Services"></label>
+                @{
+                    foreach (var service in Model.ServicesToChooseFrom)
+                    {
+                        if (@Model.Services.Contains(service.Description))
+                        {
+                            service.IsChecked = true;
+                        }
+                        <div class="form-check col-lg-2 m-2">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   value="@service.Description"
+                                   name="Services"
+                                   id="checkbox_@service.Value"
+                                   checked="@service.IsChecked">
+                            <label class="form-check-label"
+                                   for="checkbox_@service.Value">
+                                @service.Description
+                            </label>
+                        </div>
+                    }
+                }
+                <span asp-validation-for="Services" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" class="form-control" type="text">
+                <span asp-validation-for="Description" class="small text-danger"></span>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Edit Car Service" />
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

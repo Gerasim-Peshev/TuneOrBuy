@@ -1,0 +1,22 @@
+﻿@model List<CarServiceServiceModel>
+@{
+    ViewBag.Tittle = "All car services";
+}
+
+<h2 class="text-center">@ViewBag.Tittle</h2>
+
+@{
+    if (Model.Count == 0)
+    {
+        <h3 class="text-center">There is no car services</h3>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var carService in Model)
+            {
+                <partial name="_CarServicePartial" model="@carService" />
+            }
+        </div>
+    }
+}

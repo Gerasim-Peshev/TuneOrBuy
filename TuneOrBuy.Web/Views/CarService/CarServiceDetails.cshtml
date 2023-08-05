@@ -1,0 +1,49 @@
+﻿@model CarServiceDetailsServiceModel
+
+@{
+    ViewBag.Title = "Car service Details";
+}
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="container" style="display:inline">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>@Model.Name</h1>
+            <p>Located in: <b>@Model.Town.Name, @Model.Address</b></p>
+            <p>Phone number: @Model.PhoneNumber</p>
+        </div>
+        <div class="col-12 text-center">
+            <img class="card-img"
+                 src="@Model.ImageUrl" alt="Car Service Image">
+        </div>
+        <div class="col-12 row text-center">
+            <div class="col-12">
+                <p>Services</p>
+            </div>
+            @if (@Model.Services != "")
+            {
+                @foreach (var service in @Model.Services.Split(", "))
+                {
+                    <div class="col-2">
+                        <p>@service ✓</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No Services</p>
+            }
+        </div>
+        <div class="card col-12 border-0 text-center">
+            <p>@Model.Description</p>
+        </div>
+        <div class="col-5"></div>
+        <div class="card col-2">
+            <div class="card-body">
+                <h5 class="card-title">Car Service Owner Info</h5>
+                <p class="card-text">Email: @Model.CarServiceOwner.Buyer.Email</p>
+                <p class="card-text">Phone Number: @Model.CarServiceOwner.PhoneNumber</p>
+            </div>
+        </div>
+    </div>
+</div>
