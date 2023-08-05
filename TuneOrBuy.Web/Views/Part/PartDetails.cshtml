@@ -1,19 +1,19 @@
 ﻿@model PartDetailsServiceModel
 
 @{
-    ViewBag.Title = "Car Details";
+    ViewBag.Title = "Part Details";
 }
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 <div class="container" style="display:inline">
     <div class="row">
         <div class="col-12 text-center">
-            <p>@Model.Manufacturer @Model.Brand</p>
+            <h1>@Model.Manufacturer @Model.Brand</h1>
             <p>Year: @Model.Year.Year</p>
         </div>
         <div class="col-12 text-center">
             <img class="card-img"
-                 src="@Model.ImageUrl" alt="Car Image">
+                 src="@Model.ImageUrl" alt="Part Image">
         </div>
         <div class="card col-12 border-0 text-center">
             <p>Located in: <b>@Model.Seller.Town.Name</b></p>
