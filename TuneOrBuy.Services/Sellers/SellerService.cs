@@ -25,19 +25,19 @@ namespace TuneOrBuy.Services.Sellers
             this.context = data;
         }
 
-        public async Task<bool> UserIsSeller(Guid userId)
+        public async Task<bool> UserIsSeller(string userId)
         {
-            return await context.Sellers.AnyAsync(s => s.BuyerId == userId);
+            return await context.Sellers.AnyAsync(s => s.BuyerId.ToString().ToLower() == userId.ToLower());
         }
 
         public async Task<Seller> GetSeller(string userId)
         {
-            return await context.Sellers.FirstAsync(s => s.BuyerId == Guid.Parse(userId));
+            return await context.Sellers.FirstAsync(s => s.BuyerId.ToString().ToLower() == userId.ToLower());
         }
 
-        public async Task<bool> ExistsById(Guid userId)
+        public async Task<bool> ExistsById(string userId)
         {
-            return await context.Sellers.AnyAsync(s => s.BuyerId == userId);
+            return await context.Sellers.AnyAsync(s => s.BuyerId.ToString().ToLower() == userId.ToLower());
         }
 
         public async Task<bool> ExistsByPhoneNumber(string phoneNumber)
@@ -45,11 +45,11 @@ namespace TuneOrBuy.Services.Sellers
             return await context.Sellers.AnyAsync(s => s.PhoneNumber == phoneNumber);
         }
 
-        public async Task CreateSeller(Guid userId, string phoneNumber, int townId, string imageUrl)
+        public async Task CreateSeller(string userId, string phoneNumber, int townId, string imageUrl)
         {
             var sellerToAdd = new Seller()
             {
-                BuyerId = userId,
+                BuyerId = Guid.Parse(userId),
                 Buyer = await GetBuyerAsync(userId),
                 PhoneNumber = phoneNumber,
                 TownId = townId,
@@ -73,9 +73,9 @@ namespace TuneOrBuy.Services.Sellers
                         .ToListAsync();
         }
 
-        public async Task<Buyer> GetBuyerAsync(Guid userId)
+        public async Task<Buyer> GetBuyerAsync(string userId)
         {
-            return await context.Users.FirstAsync(u => u.Id == userId);
+            return await context.Users.FirstAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
         }
 
         public async Task<Town> GetTownByIdAsync(int townId)
@@ -122,9 +122,32 @@ namespace TuneOrBuy.Services.Sellers
             return cars;
         }
 
-        public Task<List<PartServiceModel>> GetAllPartsForSell(string userId)
+        public async Task<List<PartServiceModel>> GetAllPartsForSell(string userId)
         {
-            throw new NotImplementedException();
+            var seller = await GetSeller(userId);
+
+            var parts = await context.Parts
+                                     .Where(p => p.SellerId == seller.Id)
+                                     .Select(p => new PartServiceModel()
+                                      {
+                                          Id = p.Id.ToString(),
+                                          Name = p.Name,
+                                          Manufacturer = p.Manufacturer,
+                                          Brand = p.Brand,
+                                          Year = p.Year,
+                                          Price = p.Price,
+                                          ImageUrl = p.ImageUrl,
+                                          SellerId = p.SellerId.ToString(),
+                                          Description = p.Description
+                                      })
+                                     .ToListAsync();
+
+            if (parts == null)
+            {
+                return new List<PartServiceModel>();
+            }
+
+            return parts;
         }
     }
 }
