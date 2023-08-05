@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TuneOrBuy.Web.Data;
 
@@ -11,9 +12,10 @@ using TuneOrBuy.Web.Data;
 namespace TuneOrBuy.Data.Migrations
 {
     [DbContext(typeof(TuneOrBuyDbContext))]
-    partial class TuneOrBuyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230804182708_AddFavouriteCarServices")]
+    partial class AddFavouriteCarServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -278,8 +280,7 @@ namespace TuneOrBuy.Data.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
@@ -346,11 +347,6 @@ namespace TuneOrBuy.Data.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)");
-
                     b.Property<DateTime>("OpenHour")
                         .HasColumnType("datetime2");
 
@@ -358,10 +354,6 @@ namespace TuneOrBuy.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("Services")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TownId")
                         .HasColumnType("int");
