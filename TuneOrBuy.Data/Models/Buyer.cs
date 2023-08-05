@@ -23,5 +23,6 @@ namespace TuneOrBuy.Data.Models
 
         public List<Car> FavouriteCars { get; set; }
         public List<Part> FavouriteParts { get; set; }
+        public List<CarService> FavouriteCarServices { get; set; }
     }
 }

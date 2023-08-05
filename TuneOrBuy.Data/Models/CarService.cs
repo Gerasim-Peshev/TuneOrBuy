@@ -6,11 +6,6 @@ namespace TuneOrBuy.Data.Models
 {
     public class CarService
     {
-        public CarService()
-        {
-            this.Services = new List<string>();
-        }
-
         [Key]
         public Guid Id { get; set; }
 
@@ -20,7 +15,7 @@ namespace TuneOrBuy.Data.Models
         public CarServiceOwner CarServiceOwner { get; set; } = null!;
 
         [Required]
-        [StringLength(AddressMaxLength, MinimumLength = AddressMinLength)]
+        [StringLength(AddressMaxLength, MinimumLength = AddressMinLength, ErrorMessage = "Incorrect address")]
         public string Address { get; set; } = null!;
 
         [Required]
@@ -29,20 +24,24 @@ namespace TuneOrBuy.Data.Models
         public Town Town { get; set; } = null!;
 
         [Required]
-        [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength)]
-        [RegularExpression(PhoneNumberRegEx)]
+        [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength, ErrorMessage = "Incorrect phone number")]
+        [RegularExpression(PhoneNumberRegEx, ErrorMessage = "Incorrect phone number")]
         public string PhoneNumber { get; set; } = null!;
 
-        [NotMapped]
-        public virtual List<string> Services { get; set; }
+        public string Services { get; set; }
 
         [Required]
+        [Range(HourMin, HourMax, ErrorMessage = "Incorrect hour")]
         public DateTime OpenHour { get; set; }
 
         [Required]
+        [Range(HourMin, HourMax, ErrorMessage = "Incorrect hour")]
         public DateTime CloseHour { get; set; }
 
+        [StringLength(ImageUrlMaxLength, ErrorMessage = "Incorrect image url")]
+        public string ImageUrl { get; set; } = null!;
+
         [StringLength(DescriptionMaxLength, MinimumLength = DescriptionMinLength, ErrorMessage = "Incorrect description")]
-        public string? Description { get; set; } = null!;
+        public string? Description { get; set; }
     }
 }

@@ -47,6 +47,7 @@ namespace TuneOrBuy.Data.Models
         public Guid SellerId { get; set; }
         public Seller Seller { get; set; } = null!;
 
+        [StringLength(ImageUrlMaxLength)]
         public string ImageUrl { get; set; } = null!;
 
         [Required]
