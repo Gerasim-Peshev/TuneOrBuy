@@ -70,6 +70,7 @@ namespace TuneOrBuy.Services.Sellers
                             Id = t.Id,
                             Name = t.Name
                         })
+                        .OrderBy(t => t.Name)
                         .ToListAsync();
         }
 
