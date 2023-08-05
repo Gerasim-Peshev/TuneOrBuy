@@ -42,13 +42,11 @@
                         @{
                             if (SignInManager.IsSignedIn(User))
                             {
-
-
                                 var UserIsSeller = await SellerService
-                                    .UserIsSeller(Guid.Parse((ReadOnlySpan<char>) User.FindFirstValue(ClaimTypes.NameIdentifier)));
+                                    .UserIsSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                                 var UserIsCarServiceOwner = await CarServiceOwner
-                                    .UserIsCarServiceOwner(Guid.Parse((ReadOnlySpan<char>) User.FindFirstValue(ClaimTypes.NameIdentifier)));
+                                    .UserIsCarServiceOwner(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                                 if (UserIsSeller)
                                 {

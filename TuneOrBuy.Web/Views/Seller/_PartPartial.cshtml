@@ -28,7 +28,7 @@
                 }
 
                 var UserIsSeller = await sellerService
-                .UserIsSeller(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+                .UserIsSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                 if (UserIsSeller)
                 {

@@ -18,7 +18,7 @@
                class="btn btn-success">Details</a>
             @if (this.User.Identity.IsAuthenticated)
             {
-                var contains = await carService.ContainsCar(@Model.Id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var contains = await carService.ContainsCarAsync(@Model.Id, User.FindFirstValue(ClaimTypes.NameIdentifier));
                 if (contains.Item1)
                 {
                     <a asp-controller="Car" asp-action="CarToFavourite" asp-route-carId="@Model.Id">❤</a>
@@ -29,7 +29,7 @@
                 }
 
                 var UserIsSeller = await sellerService
-                .UserIsSeller(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+                .UserIsSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
                 if (UserIsSeller)
                 {

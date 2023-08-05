@@ -11,10 +11,10 @@
     @if (SignInManager.IsSignedIn(User))
     {
         var UserIsSeller = await SellerService
-            .UserIsSeller(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            .UserIsSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         var UserIsCarServiceOwner = await CarServiceOwner
-            .UserIsCarServiceOwner(Guid.Parse((ReadOnlySpan<char>)User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            .UserIsCarServiceOwner(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -23,6 +23,7 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" asp-controller="Car" asp-action="MyCars">My Favourute Cars</a>
                 <a class="dropdown-item" asp-controller="Part" asp-action="MyParts">My Favourute Parts</a>
+                <a class="dropdown-item" asp-controller="CarService" asp-action="MyCarServices">My Favourute Car Services</a>
             </div>
         </div>
 
