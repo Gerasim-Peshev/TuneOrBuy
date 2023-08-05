@@ -11,6 +11,7 @@ namespace TuneOrBuy.Data.Models
         {
             this.FavouriteCars = new List<Car>();
             this.FavouriteParts = new List<Part>();
+            this.FavouriteCarServices = new List<CarService>();
         }
 
         [Required]

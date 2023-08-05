@@ -74,12 +74,15 @@ namespace TuneOrBuy.Data
 
         public class CarService
         {
+            public const int NameMinLength = 2;
+            public const int NameMaxLength = 50;
+
             public const int AddressMinLength = 2;
             public const int AddressMaxLength = 200;
 
             public const int PhoneNumberMinLength = 7;
             public const int PhoneNumberMaxLength = 15;
-            public const string PhoneNumberRegEx = @"^([+]?[\\d]){7,15}$";
+            public const string PhoneNumberRegEx = @"^([+]?[\d]){7,15}$";
 
             public const int HourMin = 0;
             public const int HourMax = 23;

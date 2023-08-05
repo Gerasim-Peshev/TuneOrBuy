@@ -15,6 +15,10 @@ namespace TuneOrBuy.Data.Models
         public CarServiceOwner CarServiceOwner { get; set; } = null!;
 
         [Required]
+        [StringLength(NameMaxLength, MinimumLength = NameMinLength, ErrorMessage = "Incorrect name")]
+        public string Name { get; set; } = null!;
+
+        [Required]
         [StringLength(AddressMaxLength, MinimumLength = AddressMinLength, ErrorMessage = "Incorrect address")]
         public string Address { get; set; } = null!;
 
