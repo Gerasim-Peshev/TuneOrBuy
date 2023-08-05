@@ -1,13 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 using TuneOrBuy.Data;
 using TuneOrBuy.Data.Models;
 using static TuneOrBuy.Data.DataConstants.CarService;
 
 namespace TuneOrBuy.Web.Models.CarService
 {
-    public class AddCarServiceViewModel
+    public class EditCarServiceViewModel
     {
+        public string Id { get; set; }
+
+        public string CarServiceOwnerId { get; set; }
+
         [Required]
         [StringLength(NameMaxLength, MinimumLength = NameMinLength, ErrorMessage = "Incorrect name")]
         public string Name { get; set; } = null!;
