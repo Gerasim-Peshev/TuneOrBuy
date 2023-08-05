@@ -48,7 +48,7 @@ namespace TuneOrBuy.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCar(AddCarViewModel carToAdd)
         {
-            if (!ModelState.IsValid && carToAdd.Year <= carToAdd.FirstRegistrationYear)
+            if (!ModelState.IsValid && carToAdd.FirstRegistrationYear < carToAdd.Year)
             {
                 return View(CreateAddCarViewModel(carToAdd));
             }
