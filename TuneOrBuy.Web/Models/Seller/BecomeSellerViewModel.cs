@@ -1,12 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using TuneOrBuy.Data.Models;
 using static TuneOrBuy.Data.DataConstants.Seller;
-using Message = NuGet.Protocol.Plugins.Message;
 
 namespace TuneOrBuy.Web.Models.Seller
 {

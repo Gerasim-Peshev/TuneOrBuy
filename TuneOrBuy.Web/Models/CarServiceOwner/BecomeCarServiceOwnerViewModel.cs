@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json.Serialization;
 using static TuneOrBuy.Data.DataConstants.CarServiceOwner;
 
 namespace TuneOrBuy.Web.Models.CarServiceOwner

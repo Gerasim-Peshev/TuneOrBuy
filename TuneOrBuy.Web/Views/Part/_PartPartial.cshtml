@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
-@using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using TuneOrBuy.Services.Contracts
+@using static TuneOrBuy.Web.WebConstants;
 @inject ISellerService sellerService;
 @inject IPartService partService;
 @model PartServiceModel
@@ -30,12 +30,12 @@
                 var UserIsSeller = await sellerService
                 .UserIsSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                if (UserIsSeller)
+                if (UserIsSeller || User.IsInRole(AdministratorRoleName))
                 {
                     var GetUser = await sellerService.GetSeller(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 
-                    if (UserIsSeller && Model.SellerId.ToLower() == GetUser.Id.ToString().ToLower())
+                    if ((UserIsSeller && Model.SellerId.ToLower() == GetUser.Id.ToString().ToLower()) || User.IsInRole(AdministratorRoleName))
                     {
                         <a asp-controller="Part" asp-action="EditPart" asp-route-partId="@Model.Id"
                            class="btn btn-warning">Edit</a>

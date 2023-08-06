@@ -1,7 +1,7 @@
 ﻿@using System.Security.Claims
-@using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using TuneOrBuy.Services.Contracts
+@using static TuneOrBuy.Web.WebConstants;
 @inject ICarServiceOwnerService carServiceOwnerService;
 @inject ICarServiceService carServiceService;
 @model CarServiceServiceModel
@@ -31,12 +31,12 @@
                 var UserIsSeller = await carServiceOwnerService
                 .UserIsCarServiceOwner(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                if (UserIsSeller)
+                if (UserIsSeller || User.IsInRole(AdministratorRoleName))
                 {
                     var GetUser = await carServiceOwnerService.GetCarServiceOwner(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 
-                    if (UserIsSeller && Model.CarServiceOwnerId.ToLower() == GetUser.Id.ToString().ToLower())
+                    if ((UserIsSeller && Model.CarServiceOwnerId.ToLower() == GetUser.Id.ToString().ToLower()) || User.IsInRole(AdministratorRoleName))
                     {
                         <a asp-controller="CarService" asp-action="EditCarService" asp-route-carServiceId="@Model.Id"
                            class="btn btn-warning">Edit</a>

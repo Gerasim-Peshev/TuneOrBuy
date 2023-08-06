@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using TuneOrBuy.Data.Models
 @using TuneOrBuy.Services.Contracts
+@using static TuneOrBuy.Web.WebConstants;
 @inject SignInManager<Buyer> SignInManager
 @inject UserManager<Buyer> UserManager
 @inject ICarServiceOwnerService CarServiceOwner;
@@ -29,16 +30,18 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="All">All Cars</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Part" asp-action="All">All Parts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CarService" asp-action="All">All Car Services</a>
-                        </li>
                         
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                All
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="All">All Cars</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Part" asp-action="All">All Parts</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="CarService" asp-action="All">All Car Services</a>
+                            </div>
+                        </div>
+
                         @{
                             if (SignInManager.IsSignedIn(User))
                             {
@@ -48,7 +51,7 @@
                                 var UserIsCarServiceOwner = await CarServiceOwner
                                     .UserIsCarServiceOwner(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                                if (UserIsSeller)
+                                if (UserIsSeller || User.IsInRole(AdministratorRoleName))
                                 {
                                     <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +63,7 @@
                                         </div>
                                     </div>
                                 }
-                                else if (UserIsCarServiceOwner)
+                                else if (UserIsCarServiceOwner || User.IsInRole(AdministratorRoleName))
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-controller="CarService" asp-action="AddCarService">Add Car Service</a>

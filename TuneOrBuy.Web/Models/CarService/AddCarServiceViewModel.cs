@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TuneOrBuy.Data;
 using TuneOrBuy.Data.Models;
 using static TuneOrBuy.Data.DataConstants.CarService;
 

@@ -8,6 +8,7 @@ using TuneOrBuy.Services.Contracts;
 using TuneOrBuy.Services.Parts;
 using TuneOrBuy.Services.Sellers;
 using CarService = TuneOrBuy.Services.Cars.CarService;
+using static TuneOrBuy.Web.WebConstants;
 
 namespace TuneOrBuy.Web
 {
@@ -34,13 +35,14 @@ namespace TuneOrBuy.Web
             builder
                .Services
                .AddDefaultIdentity<Buyer>(options =>
-                { 
+                {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireDigit = false;
                 })
+               .AddRoles<IdentityRole<Guid>>()
                .AddEntityFrameworkStores<TuneOrBuyDbContext>();
 
             builder
@@ -87,13 +89,45 @@ namespace TuneOrBuy.Web
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
-                        app.UseAuthentication();;
+            app.UseAuthentication();
+
+            //Creating admin
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Buyer>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+
+                Task.Run(async () =>
+                {
+                    if (await roleManager.RoleExistsAsync(AdministratorRoleName))
+                    {
+                        return;
+                    }
+
+                    var role = new IdentityRole<Guid>(AdministratorRoleName);
+
+                    await roleManager.CreateAsync(role);
+
+                    string adminEmail = "admin@tob.com";
+                    string adminPassword = "admin123";
+
+                    var buyer = new Buyer()
+                    {
+                        Email = adminEmail,
+                        UserName = adminEmail,
+                        FirstName = "Admin",
+                        LastName = "Admin"
+                    };
+
+                    await userManager.CreateAsync(buyer, adminPassword);
+
+                    await userManager.AddToRoleAsync(buyer, role.Name);
+                })
+                    .GetAwaiter()
+                    .GetResult();
+            }
 
             app.Run();
         }
     }
 }
-
-
-
-

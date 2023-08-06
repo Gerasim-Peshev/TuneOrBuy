@@ -1,14 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TuneOrBuy.Data;
-using TuneOrBuy.Data.Models;
 using TuneOrBuy.Services.Contracts;
 using TuneOrBuy.Services.Parts.Models;
 using TuneOrBuy.Web.Data;
-using TuneOrBuy.Data.Models;
-using static TuneOrBuy.Data.DataConstants;
+using Buyer = TuneOrBuy.Data.Models.Buyer;
 using Part = TuneOrBuy.Data.Models.Part;
 using Seller = TuneOrBuy.Data.Models.Seller;
-using Buyer = TuneOrBuy.Data.Models.Buyer;
 using Town = TuneOrBuy.Data.Models.Town;
 
 namespace TuneOrBuy.Services.Parts
@@ -24,27 +20,27 @@ namespace TuneOrBuy.Services.Parts
 
         public async Task<Seller> GetSellerByBuyerIdAsync(string userId)
         {
-            return await context.Sellers.FirstAsync(s => s.BuyerId == Guid.Parse(userId));
+            return await context.Sellers.FirstOrDefaultAsync(s => s.BuyerId == Guid.Parse(userId));
         }
 
         public async Task<Seller> GetSellerBySellerIdAsync(string userId)
         {
-            return await context.Sellers.FirstAsync(s => s.Id == Guid.Parse(userId));
+            return await context.Sellers.FirstOrDefaultAsync(s => s.Id == Guid.Parse(userId));
         }
 
         public async Task<Buyer> GetBuyerByIdAsync(string userId)
         {
-            return await context.Users.FirstAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
+            return await context.Users.FirstOrDefaultAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
         }
 
         public async Task<Town> GetTownByIdAsync(int townId)
         {
-            return await context.Towns.FirstAsync(t => t.Id == townId);
+            return await context.Towns.FirstOrDefaultAsync(t => t.Id == townId);
         }
 
         public async Task<PartServiceModel> GetPart(string partId)
         {
-            var part = await context.Parts.FirstAsync(p => p.Id.ToString().ToLower() == partId.ToLower());
+            var part = await context.Parts.FirstOrDefaultAsync(p => p.Id.ToString().ToLower() == partId.ToLower());
 
             return new PartServiceModel()
             {
@@ -112,7 +108,7 @@ namespace TuneOrBuy.Services.Parts
 
         public async Task<PartDetailsServiceModel> PartDetailsByIdAsync(string partId)
         {
-            var part = await context.Parts.FirstAsync(c => c.Id.ToString().ToLower() == partId.ToLower());
+            var part = await context.Parts.FirstOrDefaultAsync(c => c.Id.ToString().ToLower() == partId.ToLower());
 
             var seller = await GetSellerBySellerIdAsync(part.SellerId.ToString());
             seller.Town = await GetTownByIdAsync(seller.TownId);
@@ -135,7 +131,7 @@ namespace TuneOrBuy.Services.Parts
         public async Task EditPartAsync(string id, string name, string manufacturer, string brand, int year, decimal price, string sellerId,
                                   string imageUrl, string description)
         {
-            var partToEdit = await context.Parts.FirstAsync(p => p.Id.ToString().ToLower() == id.ToLower());
+            var partToEdit = await context.Parts.FirstOrDefaultAsync(p => p.Id.ToString().ToLower() == id.ToLower());
 
             partToEdit.Manufacturer = manufacturer;
             partToEdit.Brand = brand;
@@ -150,39 +146,10 @@ namespace TuneOrBuy.Services.Parts
 
         public async Task DeletePart(string partId)
         {
-            var partToDelete = await context.Parts.FirstAsync(p => p.Id.ToString().ToLower()  == partId.ToLower());
+            var partToDelete = await context.Parts.FirstOrDefaultAsync(p => p.Id.ToString().ToLower()  == partId.ToLower());
 
             context.Remove(partToDelete);
             await context.SaveChangesAsync();
-        }
-
-        public async Task ToFavouriteParts(string partId, string userId)
-        {
-            var buyer = await context.Users.FirstAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
-
-            var contains = await ContainsPart(partId, userId);
-
-            if (!contains.Item1)
-            {
-                buyer.FavouriteParts.Add(contains.Item3);
-            }
-            else if (contains.Item1)
-            {
-                buyer.FavouriteParts.Remove(contains.Item3);
-            }
-
-            await context.SaveChangesAsync();
-        }
-
-        public async Task<Tuple<bool, Buyer, Part>> ContainsPart(string partId, string userId)
-        {
-            var part = await context.Parts
-                                   .FirstAsync(c => c.Id.ToString().ToLower() == partId.ToLower());
-
-            var buyer = await context.Users
-                                     .FirstAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
-            return new Tuple<bool, Buyer, Part>(
-                buyer.FavouriteParts.Any(c => c.Id.ToString().ToLower() == partId.ToLower()), buyer, part);
         }
 
         public async Task<List<PartServiceModel>> MyFavoritePartsAsync(string userId)
@@ -219,6 +186,35 @@ namespace TuneOrBuy.Services.Parts
             }
 
             return partsToReturn;
+        }
+
+        public async Task ToFavouriteParts(string partId, string userId)
+        {
+            var buyer = await context.Users.FirstOrDefaultAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
+
+            var contains = await ContainsPart(partId, userId);
+
+            if (!contains.Item1)
+            {
+                buyer.FavouriteParts.Add(contains.Item3);
+            }
+            else if (contains.Item1)
+            {
+                buyer.FavouriteParts.Remove(contains.Item3);
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Tuple<bool, Buyer, Part>> ContainsPart(string partId, string userId)
+        {
+            var part = await context.Parts
+                                   .FirstOrDefaultAsync(c => c.Id.ToString().ToLower() == partId.ToLower());
+
+            var buyer = await context.Users
+                                     .FirstOrDefaultAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
+            return new Tuple<bool, Buyer, Part>(
+                buyer.FavouriteParts.Any(c => c.Id.ToString().ToLower() == partId.ToLower()), buyer, part);
         }
     }
 }

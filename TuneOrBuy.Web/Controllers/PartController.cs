@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TuneOrBuy.Data;
 using TuneOrBuy.Services.Contracts;
@@ -7,6 +8,7 @@ using TuneOrBuy.Web.Models.Part;
 
 namespace TuneOrBuy.Web.Controllers
 {
+    [Authorize]
     public class PartController : Controller
     {
         private readonly IPartService partService;
@@ -21,6 +23,7 @@ namespace TuneOrBuy.Web.Controllers
             this.partService = service;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> All()
         {
             var enumerableOfParts = new List<PartServiceModel>();
@@ -34,9 +37,22 @@ namespace TuneOrBuy.Web.Controllers
             return View(enumerableOfParts);
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> PartDetails(string partId)
+        {
+            var partToReturn = await partService.PartDetailsByIdAsync(partId);
+
+            return View(partToReturn);
+        }
+
         [HttpGet]
         public async Task<IActionResult> AddPart()
         {
+            if (await partService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             var viewToReturn = new AddPartViewModel();
 
             return View(CreateAddPartViewModel(viewToReturn));
@@ -45,6 +61,11 @@ namespace TuneOrBuy.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPart(AddPartViewModel partToAdd)
         {
+            if (await partService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(CreateAddPartViewModel(partToAdd));
@@ -56,16 +77,14 @@ namespace TuneOrBuy.Web.Controllers
             return RedirectToAction("All", "Part");
         }
 
-        public async Task<IActionResult> PartDetails(string partId)
-        {
-            var partToReturn = await partService.PartDetailsByIdAsync(partId);
-
-            return View(partToReturn);
-        }
-
         [HttpGet]
         public async Task<IActionResult> EditPart(string partId)
         {
+            if (await partService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             var part = await partService.GetPart(partId);
 
             var modelToReturn = new EditPartViewModel()
@@ -87,6 +106,11 @@ namespace TuneOrBuy.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPart(EditPartViewModel partToEdit)
         {
+            if (await partService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(CreateEditPartViewModel(partToEdit));
@@ -101,9 +125,20 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<IActionResult> DeletePart(string partId)
         {
+            if (await partService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             await partService.DeletePart(partId);
 
             return RedirectToAction("All", "Part");
+        }
+
+        public async Task<IActionResult> MyParts()
+        {
+            var favoriteParts = await partService.MyFavoritePartsAsync(UserId());
+            return View(favoriteParts);
         }
 
         public async Task<IActionResult> PartToFavourite(string partId)
@@ -113,12 +148,6 @@ namespace TuneOrBuy.Web.Controllers
             await partService.ToFavouriteParts(partId, userId);
 
             return RedirectToAction("All", "Part");
-        }
-
-        public async Task<IActionResult> MyParts()
-        {
-            var favoriteParts = await partService.MyFavoritePartsAsync(UserId());
-            return View(favoriteParts);
         }
 
         private AddPartViewModel CreateAddPartViewModel(AddPartViewModel model)

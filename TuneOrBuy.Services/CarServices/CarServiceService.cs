@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using TuneOrBuy.Data.Models;
-using TuneOrBuy.Services.Cars;
-using TuneOrBuy.Services.Cars.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using TuneOrBuy.Services.CarServices.Models;
 using TuneOrBuy.Services.Contracts;
 using TuneOrBuy.Web.Data;
-using static TuneOrBuy.Data.DataConstants;
 using Buyer = TuneOrBuy.Data.Models.Buyer;
 using CarService = TuneOrBuy.Data.Models.CarService;
 using CarServiceOwner = TuneOrBuy.Data.Models.CarServiceOwner;
@@ -29,28 +20,28 @@ namespace TuneOrBuy.Services.CarServices
 
         public async Task<CarServiceOwner> GetOwnerByBuyerIdAsync(string userId)
         {
-            return await context.CarServiceOwners.FirstAsync(cso => cso.BuyerId == Guid.Parse(userId));
+            return await context.CarServiceOwners.FirstOrDefaultAsync(cso => cso.BuyerId == Guid.Parse(userId));
         }
 
         public async Task<CarServiceOwner> GetOwnerByOwnerIdAsync(string userId)
         {
-            return await context.CarServiceOwners.FirstAsync(cso => cso.Id == Guid.Parse(userId));
+            return await context.CarServiceOwners.FirstOrDefaultAsync(cso => cso.Id == Guid.Parse(userId));
         }
 
         public async Task<Buyer> GetBuyerByIdAsync(string userId)
         {
-            return await context.Users.FirstAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
+            return await context.Users.FirstOrDefaultAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
         }
 
         public async Task<Town> GetTownByIdAsync(int townId)
         {
-            return await context.Towns.FirstAsync(t => t.Id == townId);
+            return await context.Towns.FirstOrDefaultAsync(t => t.Id == townId);
         }
 
         public async Task<CarServiceServiceModel> GetCarServiceAsync(string carServiceId)
         {
             var carService = await context.CarServices
-                                          .FirstAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
+                                          .FirstOrDefaultAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
 
             carService.Town = await GetTownByIdAsync(carService.TownId);
 
@@ -112,6 +103,32 @@ namespace TuneOrBuy.Services.CarServices
             return carServices;
         }
 
+        public async Task<CarServiceDetailsServiceModel> CarServiceDetailsByIdAsync(string carServiceId)
+        {
+            var carService = await context.CarServices
+                                          .FirstOrDefaultAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
+
+            var owner = await GetOwnerByOwnerIdAsync(carService.CarServiceOwnerId.ToString());
+            var town = await GetTownByIdAsync(carService.TownId);
+            owner.Buyer = await GetBuyerByIdAsync(owner.BuyerId.ToString());
+
+            var carServiceToReturn = new CarServiceDetailsServiceModel()
+            {
+                Name = carService.Name,
+                Address = carService.Address,
+                CarServiceOwner = owner,
+                Town = town,
+                PhoneNumber = carService.PhoneNumber,
+                Services = carService.Services,
+                OpenHour = carService.OpenHour,
+                CloseHour = carService.CloseHour,
+                ImageUrl = carService.ImageUrl,
+                Description = carService.Description
+            };
+
+            return carServiceToReturn;
+        }
+
         public async Task CreateCarServiceAsync(string name, string address, string ownerId, int townId, string phoneNumber, string services, int openHour,
                                    int closeHour, string imageUrl, string description)
         {
@@ -141,37 +158,11 @@ namespace TuneOrBuy.Services.CarServices
             await context.SaveChangesAsync();
         }
 
-        public async Task<CarServiceDetailsServiceModel> CarServiceDetailsByIdAsync(string carServiceId)
-        {
-            var carService = await context.CarServices
-                                          .FirstAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
-
-            var owner = await GetOwnerByOwnerIdAsync(carService.CarServiceOwnerId.ToString());
-            var town = await GetTownByIdAsync(carService.TownId);
-            owner.Buyer = await GetBuyerByIdAsync(owner.BuyerId.ToString());
-
-            var carServiceToReturn = new CarServiceDetailsServiceModel()
-            {
-                Name = carService.Name,
-                Address = carService.Address,
-                CarServiceOwner = owner,
-                Town = town,
-                PhoneNumber = carService.PhoneNumber,
-                Services = carService.Services,
-                OpenHour = carService.OpenHour,
-                CloseHour = carService.CloseHour,
-                ImageUrl = carService.ImageUrl,
-                Description = carService.Description
-            };
-
-            return carServiceToReturn;
-        }
-
         public async Task EditCarServiceAsync(string id, string name, string address, string ownerId, int townId, string phoneNumber, string services,
                                         int openHour, int closeHour, string imageUrl, string description)
         {
             var carService = await context.CarServices
-                                    .FirstAsync(cs => cs.Id.ToString().ToLower() == id.ToLower());
+                                    .FirstOrDefaultAsync(cs => cs.Id.ToString().ToLower() == id.ToLower());
 
             carService.Name = name;
             carService.Address = address;
@@ -191,41 +182,10 @@ namespace TuneOrBuy.Services.CarServices
         public async Task DeleteCarServiceAsync(string carServiceId)
         {
             var carService = await context.CarServices
-                                    .FirstAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
+                                    .FirstOrDefaultAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
 
             context.Remove(carService);
             await context.SaveChangesAsync();
-        }
-
-        public async Task ToFavouriteCarsAsync(string carServiceId, string userId)
-        {
-            var buyer = await context.Users
-                                     .FirstAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
-
-            var contains = await ContainsCarServiceAsync(carServiceId, userId);
-
-            if (!contains.Item1)
-            {
-                buyer.FavouriteCarServices.Add(contains.Item3);
-            }
-            else if (contains.Item1)
-            {
-                buyer.FavouriteCarServices.Remove(contains.Item3);
-            }
-
-            await context.SaveChangesAsync();
-        }
-
-        public async Task<Tuple<bool, Buyer, CarService>> ContainsCarServiceAsync(string carServiceId, string userId)
-        {
-            var carService = await context.CarServices
-                                          .FirstAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
-
-            var buyer = await context.Users
-                                     .FirstAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
-
-            return new Tuple<bool, Buyer, CarService>(
-            buyer.FavouriteCarServices.Any(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower()), buyer, carService);
         }
 
         public async Task<List<CarServiceServiceModel>> MyFavoriteCarServicesAsync(string userId)
@@ -264,6 +224,37 @@ namespace TuneOrBuy.Services.CarServices
             }
 
             return carServicesToReturn;
+        }
+
+        public async Task ToFavouriteCarsAsync(string carServiceId, string userId)
+        {
+            var buyer = await context.Users
+                                     .FirstOrDefaultAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
+
+            var contains = await ContainsCarServiceAsync(carServiceId, userId);
+
+            if (!contains.Item1)
+            {
+                buyer.FavouriteCarServices.Add(contains.Item3);
+            }
+            else if (contains.Item1)
+            {
+                buyer.FavouriteCarServices.Remove(contains.Item3);
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Tuple<bool, Buyer, CarService>> ContainsCarServiceAsync(string carServiceId, string userId)
+        {
+            var carService = await context.CarServices
+                                          .FirstOrDefaultAsync(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower());
+
+            var buyer = await context.Users
+                                     .FirstOrDefaultAsync(b => b.Id.ToString().ToLower() == userId.ToLower());
+
+            return new Tuple<bool, Buyer, CarService>(
+            buyer.FavouriteCarServices.Any(cs => cs.Id.ToString().ToLower() == carServiceId.ToLower()), buyer, carService);
         }
     }
 }

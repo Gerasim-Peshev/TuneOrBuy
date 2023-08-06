@@ -1,24 +1,26 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Security.Claims;
 using TuneOrBuy.Services.Contracts;
-using TuneOrBuy.Web.Models.Car;
 using TuneOrBuy.Web.Models.Seller;
 
 namespace TuneOrBuy.Web.Controllers
 {
+    [Authorize]
     public class SellerController : Controller
     {
         private readonly ISellerService sellerService;
+        private readonly ICarServiceService carServiceService;
 
         private string UserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
-        public SellerController(ISellerService sellers)
+        public SellerController(ISellerService sellers, ICarServiceService carServiceService)
         {
             this.sellerService = sellers;
+            this.carServiceService = carServiceService;
         }
 
         public async Task<bool> UserIsSeller()
@@ -29,6 +31,11 @@ namespace TuneOrBuy.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Become()
         {
+            if (await UserIsSeller() == true || await carServiceService.GetOwnerByBuyerIdAsync(UserId()) != null)
+            {
+                return RedirectToAction("All", "Car");
+            }
+
             var allTowns = await sellerService.GetAllTowns();
 
             var viewToReturn = new BecomeSellerViewModel
@@ -42,6 +49,11 @@ namespace TuneOrBuy.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Become(BecomeSellerViewModel sellerToBecome)
         {
+            if (await UserIsSeller() == true || await carServiceService.GetOwnerByBuyerIdAsync(UserId()) != null)
+            {
+                return RedirectToAction("All", "Car");
+            }
+
             var userId = UserId();
 
             if (await sellerService.ExistsById(userId))
@@ -71,6 +83,11 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<IActionResult> CarsForSell()
         {
+            if (await UserIsSeller() == false || await carServiceService.GetOwnerByBuyerIdAsync(UserId()) != null)
+            {
+                return RedirectToAction("All", "Car");
+            }
+
             var userId = UserId();
 
             var carsForSell = await sellerService.GetAllCarsForSell(userId);
@@ -80,6 +97,11 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<IActionResult> PartsForSell()
         {
+            if (await UserIsSeller() == false || await carServiceService.GetOwnerByBuyerIdAsync(UserId()) != null)
+            {
+                return RedirectToAction("All", "Part");
+            }
+
             var userId = UserId();
 
             var partsForSell = await sellerService.GetAllPartsForSell(userId);

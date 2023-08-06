@@ -1,15 +1,15 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TuneOrBuy.Services.Cars.Enums;
+using System.Security.Claims;
+using TuneOrBuy.Data;
 using TuneOrBuy.Services.Cars.Models;
 using TuneOrBuy.Services.Contracts;
-using TuneOrBuy.Web.Models.Car;
-using System.Linq;
-using TuneOrBuy.Data;
 using TuneOrBuy.Web.Models;
+using TuneOrBuy.Web.Models.Car;
 
 namespace TuneOrBuy.Web.Controllers
 {
+    [Authorize]
     public class CarController : Controller
     {
         private readonly ICarService carService;
@@ -24,6 +24,7 @@ namespace TuneOrBuy.Web.Controllers
             this.carService = service;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> All()
         {
             var enumerableOfCars = new List<CarServiceModel>();
@@ -37,9 +38,22 @@ namespace TuneOrBuy.Web.Controllers
             return View(enumerableOfCars);
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> CarDetails(string carId)
+        {
+            var carToReturn = await carService.CarDetailsByIdAsync(carId);
+
+            return View(carToReturn);
+        }
+
         [HttpGet]
         public async Task<IActionResult> AddCar()
         {
+            if (await carService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             var viewToReturn = new AddCarViewModel();
 
             return View(CreateAddCarViewModel(viewToReturn));
@@ -48,6 +62,11 @@ namespace TuneOrBuy.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCar(AddCarViewModel carToAdd)
         {
+            if (await carService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             if (!ModelState.IsValid && carToAdd.FirstRegistrationYear < carToAdd.Year)
             {
                 return View(CreateAddCarViewModel(carToAdd));
@@ -65,16 +84,14 @@ namespace TuneOrBuy.Web.Controllers
             return RedirectToAction("All", "Car");
         }
 
-        public async Task<IActionResult> CarDetails(string carId)
-        {
-            var carToReturn = await carService.CarDetailsByIdAsync(carId);
-
-            return View(carToReturn);
-        }
-
         [HttpGet]
         public async Task<IActionResult> EditCar(string carId)
         {
+            if (await carService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             var car = await carService.GetCarAsync(carId);
 
             var modelToReturn = new EditCarViewModel()
@@ -108,6 +125,11 @@ namespace TuneOrBuy.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCar(EditCarViewModel editedCar)
         {
+            if (await carService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             if (!ModelState.IsValid && editedCar.Year <= editedCar.FirstRegistrationYear)
             {
                 return View(CreateEditCarViewModel(editedCar));
@@ -125,9 +147,20 @@ namespace TuneOrBuy.Web.Controllers
 
         public async Task<IActionResult> DeleteCar(string carId)
         {
+            if (await carService.GetSellerByBuyerIdAsync(UserId()) == null)
+            {
+                return RedirectToAction("Become", "Seller");
+            }
+
             await carService.DeleteCarAsync(carId);
 
             return RedirectToAction("All", "Car");
+        }
+
+        public async Task<IActionResult> MyCars()
+        {
+            var favoriteCars = await carService.MyFavoriteCarsAsync(UserId());
+            return View(favoriteCars);
         }
 
         public async Task<IActionResult> CarToFavourite(string carId)
@@ -137,12 +170,6 @@ namespace TuneOrBuy.Web.Controllers
             await carService.ToFavouriteCarsAsync(carId, userId);
 
             return RedirectToAction("All", "Car");
-        }
-
-        public async Task<IActionResult> MyCars()
-        {
-            var favoriteCars = await carService.MyFavoriteCarsAsync(UserId());
-            return View(favoriteCars);
         }
 
         private AddCarViewModel CreateAddCarViewModel(AddCarViewModel viewToReturn)

@@ -1,25 +1,26 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using TuneOrBuy.Services.CarServiceOwners;
+using System.Security.Claims;
 using TuneOrBuy.Services.Contracts;
-using TuneOrBuy.Services.Sellers;
 using TuneOrBuy.Web.Models.CarServiceOwner;
 
 namespace TuneOrBuy.Web.Controllers
 {
+    [Authorize]
     public class CarServiceOwnerController : Controller
     {
         private readonly ICarServiceOwnerService carServiceOwnerService;
+        private readonly ISellerService sellerService;
 
         private string UserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
-        public CarServiceOwnerController(ICarServiceOwnerService carServiceOwners)
+        public CarServiceOwnerController(ICarServiceOwnerService carServiceOwners, ISellerService sellerService)
         {
             this.carServiceOwnerService = carServiceOwners;
+            this.sellerService = sellerService;
         }
 
         public async Task<bool> UserIsCarServiceOwner()
@@ -30,12 +31,22 @@ namespace TuneOrBuy.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Become()
         {
+            if (await UserIsCarServiceOwner() == true || await sellerService.GetSeller(UserId()) != null)
+            {
+                return RedirectToAction("All", "CarService");
+            }
+
             return View(new BecomeCarServiceOwnerViewModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> Become(BecomeCarServiceOwnerViewModel carServiceOwnerToBecome)
         {
+            if (await UserIsCarServiceOwner() == true || await sellerService.GetSeller(UserId()) != null)
+            {
+                return RedirectToAction("All", "CarService");
+            }
+
             var userId = UserId();
 
             if (await carServiceOwnerService.ExistsById(userId))
@@ -56,11 +67,6 @@ namespace TuneOrBuy.Web.Controllers
             await carServiceOwnerService.CreateCarServiceOwner(userId, carServiceOwnerToBecome.PhoneNumber);
 
             return RedirectToAction("Index", "Home");
-        }
-
-        public async Task<IActionResult> MyServices()
-        {
-            return View();
         }
     }
 }

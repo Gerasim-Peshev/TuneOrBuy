@@ -1,5 +1,22 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<PartServiceModel>
 @{
+    ViewBag.Tittle = "All Parts For Sell";
+}
+
+<h2 class="text-center">@ViewBag.Tittle</h2>
+
+@{
+    if (Model.Count == 0)
+    {
+        <h3 class="text-center">There is no cars</h3>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var part in Model)
+            {
+                <partial name="_PartPartial" model="@part" />
+            }
+        </div>
+    }
 }

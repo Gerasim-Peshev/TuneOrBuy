@@ -1,6 +1,4 @@
 ﻿using TuneOrBuy.Data;
-using TuneOrBuy.Data.Models;
-using TuneOrBuy.Services.Cars.Models;
 
 namespace TuneOrBuy.Web.Models.Car
 {

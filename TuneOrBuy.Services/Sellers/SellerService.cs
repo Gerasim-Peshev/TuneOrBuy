@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using TuneOrBuy.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using TuneOrBuy.Services.Cars.Models;
 using TuneOrBuy.Services.Contracts;
 using TuneOrBuy.Services.Parts.Models;
 using TuneOrBuy.Web.Data;
-using static TuneOrBuy.Data.DataConstants;
 using Buyer = TuneOrBuy.Data.Models.Buyer;
 using Seller = TuneOrBuy.Data.Models.Seller;
 using Town = TuneOrBuy.Data.Models.Town;
@@ -30,9 +23,32 @@ namespace TuneOrBuy.Services.Sellers
             return await context.Sellers.AnyAsync(s => s.BuyerId.ToString().ToLower() == userId.ToLower());
         }
 
+        public async Task<IEnumerable<Town>> GetAllTowns()
+        {
+            return await context
+                        .Towns
+                        .Select(t => new Town()
+                        {
+                            Id = t.Id,
+                            Name = t.Name
+                        })
+                        .OrderBy(t => t.Name)
+                        .ToListAsync();
+        }
+
+        public async Task<Buyer> GetBuyerAsync(string userId)
+        {
+            return await context.Users.FirstOrDefaultAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
+        }
+
+        public async Task<Town> GetTownByIdAsync(int townId)
+        {
+            return await context.Towns.FirstOrDefaultAsync(t => t.Id == townId);
+        }
+
         public async Task<Seller> GetSeller(string userId)
         {
-            return await context.Sellers.FirstAsync(s => s.BuyerId.ToString().ToLower() == userId.ToLower());
+            return await context.Sellers.FirstOrDefaultAsync(s => s.BuyerId.ToString().ToLower() == userId.ToLower());
         }
 
         public async Task<bool> ExistsById(string userId)
@@ -59,29 +75,6 @@ namespace TuneOrBuy.Services.Sellers
 
             await context.Sellers.AddAsync(sellerToAdd);
             await context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<Town>> GetAllTowns()
-        {
-            return await context
-                        .Towns
-                        .Select(t => new Town()
-                        {
-                            Id = t.Id,
-                            Name = t.Name
-                        })
-                        .OrderBy(t => t.Name)
-                        .ToListAsync();
-        }
-
-        public async Task<Buyer> GetBuyerAsync(string userId)
-        {
-            return await context.Users.FirstAsync(u => u.Id.ToString().ToLower() == userId.ToLower());
-        }
-
-        public async Task<Town> GetTownByIdAsync(int townId)
-        {
-            return await context.Towns.FirstAsync(t => t.Id == townId);
         }
 
         public async Task<List<CarServiceModel>> GetAllCarsForSell(string userId)

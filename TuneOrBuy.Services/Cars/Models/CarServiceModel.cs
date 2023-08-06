@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using TuneOrBuy.Data;
-
-namespace TuneOrBuy.Services.Cars.Models
+﻿namespace TuneOrBuy.Services.Cars.Models
 {
     public class CarServiceModel
     {
