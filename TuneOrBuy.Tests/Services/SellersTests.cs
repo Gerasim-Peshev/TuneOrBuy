@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TuneOrBuy.Data;
-using TuneOrBuy.Data.Models;
-using TuneOrBuy.Services.Sellers;
+﻿using TuneOrBuy.Services.Sellers;
 using TuneOrBuy.Tests.Mocks;
 using TuneOrBuy.Web.Data;
-using static TuneOrBuy.Data.DataConstants;
 using Buyer = TuneOrBuy.Data.Models.Buyer;
 using Seller = TuneOrBuy.Data.Models.Seller;
 using Town = TuneOrBuy.Data.Models.Town;

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using TuneOrBuy.Data.Migrations;
-using TuneOrBuy.Data.Models;
+﻿using TuneOrBuy.Data.Models;
 using TuneOrBuy.Services.Cars.Models;
 using TuneOrBuy.Tests.Mocks;
 using TuneOrBuy.Web.Data;
