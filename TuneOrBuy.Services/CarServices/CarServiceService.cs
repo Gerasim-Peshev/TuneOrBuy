@@ -212,7 +212,7 @@ namespace TuneOrBuy.Services.CarServices
             foreach (var carService in await context.CarServices.ToListAsync())
             {
                 var contains = await ContainsCarServiceAsync(carService.Id.ToString(), userId);
-                if (contains.Item1)
+                if (contains.Item1 == true)
                 {
                     carService.Town = await GetTownByIdAsync(carService.TownId);
                     carServices.Add(carService);
@@ -221,7 +221,7 @@ namespace TuneOrBuy.Services.CarServices
 
             
 
-            var carServicesToReturn = await context.CarServices
+            var carServicesToReturn = carServices
                                                    .Select(fcs => new CarServiceServiceModel()
                                                     {
                                                         Id = fcs.Id.ToString(),
@@ -237,7 +237,7 @@ namespace TuneOrBuy.Services.CarServices
                                                         ImageUrl = fcs.ImageUrl,
                                                         Description = fcs.Description
                                                     })
-                                                   .ToListAsync();
+                                                   .ToList();
 
             if (carServicesToReturn == null)
             {

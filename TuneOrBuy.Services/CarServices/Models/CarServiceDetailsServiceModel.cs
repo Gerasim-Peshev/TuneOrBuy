@@ -13,7 +13,7 @@ namespace TuneOrBuy.Services.CarServices.Models
 
         public string PhoneNumber { get; set; } = null!;
 
-        public string Services { get; set; }
+        public string Services { get; set; } = null!;
 
         public DateTime OpenHour { get; set; }
 

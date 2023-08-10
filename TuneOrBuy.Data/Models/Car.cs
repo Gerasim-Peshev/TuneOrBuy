@@ -64,7 +64,7 @@ namespace TuneOrBuy.Data.Models
         [Required]
         public string NumberOfSeats { get; set; } = null!;
 
-        public string Equipments { get; set; }
+        public string Equipments { get; set; } = null!;
 
         public string? Description { get; set; }
 

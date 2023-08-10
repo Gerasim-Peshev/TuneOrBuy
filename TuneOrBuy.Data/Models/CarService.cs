@@ -32,7 +32,7 @@ namespace TuneOrBuy.Data.Models
         [RegularExpression(PhoneNumberRegEx, ErrorMessage = "Incorrect phone number")]
         public string PhoneNumber { get; set; } = null!;
 
-        public string Services { get; set; }
+        public string Services { get; set; } = null!;
 
         [Required]
         [Range(HourMin, HourMax, ErrorMessage = "Incorrect hour")]

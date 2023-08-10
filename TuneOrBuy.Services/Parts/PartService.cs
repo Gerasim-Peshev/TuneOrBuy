@@ -116,6 +116,7 @@ namespace TuneOrBuy.Services.Parts
 
             var partToReturn = new PartDetailsServiceModel()
             {
+                Name = part.Name,
                 Manufacturer = part.Manufacturer,
                 Brand = part.Brand,
                 Year = part.Year,
