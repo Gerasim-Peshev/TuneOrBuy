@@ -129,8 +129,16 @@ namespace TuneOrBuy.Services.CarServices
             return carServiceToReturn;
         }
 
-        public async Task CreateCarServiceAsync(string name, string address, string ownerId, int townId, string phoneNumber, string services, int openHour,
-                                   int closeHour, string imageUrl, string description)
+        public async Task CreateCarServiceAsync(string name, 
+                                                string address, 
+                                                string ownerId, 
+                                                int townId, 
+                                                string phoneNumber, 
+                                                string services, 
+                                                int openHour,
+                                                int closeHour, 
+                                                string imageUrl, 
+                                                string description)
         {
             var owner = await GetOwnerByBuyerIdAsync(ownerId);
             var town = await GetTownByIdAsync(townId);
@@ -158,8 +166,17 @@ namespace TuneOrBuy.Services.CarServices
             await context.SaveChangesAsync();
         }
 
-        public async Task EditCarServiceAsync(string id, string name, string address, string ownerId, int townId, string phoneNumber, string services,
-                                        int openHour, int closeHour, string imageUrl, string description)
+        public async Task EditCarServiceAsync(string id, 
+                                              string name, 
+                                              string address, 
+                                              string ownerId, 
+                                              int townId, 
+                                              string phoneNumber, 
+                                              string services,
+                                              int openHour, 
+                                              int closeHour, 
+                                              string imageUrl, 
+                                              string description)
         {
             var carService = await context.CarServices
                                     .FirstOrDefaultAsync(cs => cs.Id.ToString().ToLower() == id.ToLower());
@@ -197,26 +214,30 @@ namespace TuneOrBuy.Services.CarServices
                 var contains = await ContainsCarServiceAsync(carService.Id.ToString(), userId);
                 if (contains.Item1)
                 {
+                    carService.Town = await GetTownByIdAsync(carService.TownId);
                     carServices.Add(carService);
                 }
             }
 
-            var carServicesToReturn = carServices
-                              .Select(fcs => new CarServiceServiceModel()
-                              {
-                                  Id = fcs.Id.ToString().ToLower(),
-                                  CarServiceOwnerId = fcs.CarServiceOwnerId.ToString(),
-                                  Name = fcs.Name,
-                                  Address = fcs.Address,
-                                  TownId = fcs.TownId,
-                                  PhoneNumber = fcs.PhoneNumber,
-                                  Services = fcs.Services,
-                                  OpenHour = fcs.OpenHour,
-                                  CloseHour = fcs.CloseHour,
-                                  ImageUrl = fcs.ImageUrl,
-                                  Description = fcs.Description
-                              })
-                              .ToList();
+            
+
+            var carServicesToReturn = await context.CarServices
+                                                   .Select(fcs => new CarServiceServiceModel()
+                                                    {
+                                                        Id = fcs.Id.ToString(),
+                                                        CarServiceOwnerId = fcs.CarServiceOwnerId.ToString(),
+                                                        Name = fcs.Name,
+                                                        Address = fcs.Address,
+                                                        TownId = fcs.TownId,
+                                                        Town = fcs.Town,
+                                                        PhoneNumber = fcs.PhoneNumber,
+                                                        Services = fcs.Services,
+                                                        OpenHour = fcs.OpenHour,
+                                                        CloseHour = fcs.CloseHour,
+                                                        ImageUrl = fcs.ImageUrl,
+                                                        Description = fcs.Description
+                                                    })
+                                                   .ToListAsync();
 
             if (carServicesToReturn == null)
             {
@@ -226,7 +247,7 @@ namespace TuneOrBuy.Services.CarServices
             return carServicesToReturn;
         }
 
-        public async Task ToFavouriteCarsAsync(string carServiceId, string userId)
+        public async Task ToFavouriteCarServicesAsync(string carServiceId, string userId)
         {
             var buyer = await context.Users
                                      .FirstOrDefaultAsync(u => u.Id.ToString().ToLower() == userId.ToLower());

@@ -25,7 +25,7 @@ namespace TuneOrBuy.Services.Contracts
         Task<CarServiceDetailsServiceModel> CarServiceDetailsByIdAsync(string carServiceId);
         Task EditCarServiceAsync(string id, string name, string address, string ownerId, int townId, string phoneNumber, string services, int openHour, int closeHour, string imageUrl, string description);
         Task DeleteCarServiceAsync(string carServiceId);
-        Task ToFavouriteCarsAsync(string carServiceId, string userId);
+        Task ToFavouriteCarServicesAsync(string carServiceId, string userId);
         Task<Tuple<bool, Buyer, CarService>> ContainsCarServiceAsync(string carServiceId, string userId);
         Task<List<CarServiceServiceModel>> MyFavoriteCarServicesAsync(string userId);
     }

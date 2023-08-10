@@ -90,7 +90,9 @@ namespace TuneOrBuy.Services.Cars
                                         Description = c.Description,
                                         ServiceHistory = c.ServiceHistory
                                     })
-                                .ToListAsync();
+                                    .OrderBy(c => c.Manufacturer)
+                                    .ThenBy(c => c.Brand)
+                                    .ToListAsync();
 
             if (cars == null)
             {
@@ -134,10 +136,25 @@ namespace TuneOrBuy.Services.Cars
             return carToReturn;
         }
 
-        public async Task CreateCarAsync(string manufacturer, string brand, string bodyType, string vin, string fuel, int horsePower,
-                                         int year, int firstRegistrationYear, decimal price, int traveledDistance, string sellerId, string imageUrl,
-                                         string gearType, string color, string numberOfDoors, string numberOfSeats, List<string> equipments,
-                                         string description, bool serviceHistory)
+        public async Task CreateCarAsync(string manufacturer, 
+                                         string brand, 
+                                         string bodyType, 
+                                         string vin, 
+                                         string fuel, 
+                                         int horsePower,
+                                         int year, 
+                                         int firstRegistrationYear, 
+                                         decimal price, 
+                                         int traveledDistance, 
+                                         string sellerId, 
+                                         string imageUrl,
+                                         string gearType, 
+                                         string color, 
+                                         string numberOfDoors, 
+                                         string numberOfSeats, 
+                                         List<string> equipments,
+                                         string description, 
+                                         bool serviceHistory)
         {
 
             var seller = await GetSellerByBuyerIdAsync(sellerId);
