@@ -2,13 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using TuneOrBuy.Data.Models;
 using TuneOrBuy.Web.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using TuneOrBuy.Services.CarServiceOwners;
 using TuneOrBuy.Services.CarServices;
 using TuneOrBuy.Services.Contracts;
 using TuneOrBuy.Services.Parts;
 using TuneOrBuy.Services.Sellers;
 using CarService = TuneOrBuy.Services.Cars.CarService;
-using static TuneOrBuy.Web.WebConstants;
+using static TuneOrBuy.Web.Areas.Admin.AdminConstants;
 
 namespace TuneOrBuy.Web
 {
@@ -47,7 +48,10 @@ namespace TuneOrBuy.Web
 
             builder
                .Services
-               .AddControllersWithViews();
+               .AddControllersWithViews(options =>
+                {
+                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                });
 
             builder
                .Services
@@ -88,6 +92,9 @@ namespace TuneOrBuy.Web
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "Areas",
+                pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
             app.UseAuthentication();
 

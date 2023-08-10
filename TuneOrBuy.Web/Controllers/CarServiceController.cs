@@ -148,7 +148,7 @@ namespace TuneOrBuy.Web.Controllers
         {
             var userId = UserId();
 
-            await carServiceService.ToFavouriteCarsAsync(carServiceId, userId);
+            await carServiceService.ToFavouriteCarServicesAsync(carServiceId, userId);
 
             return RedirectToAction("All", "CarService");
         }

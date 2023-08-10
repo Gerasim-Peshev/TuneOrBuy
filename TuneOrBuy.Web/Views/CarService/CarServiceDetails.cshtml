@@ -9,8 +9,17 @@
     <div class="row">
         <div class="col-12 text-center">
             <h1>@Model.Name</h1>
-            <p>Located in: <b>@Model.Town.Name, @Model.Address</b></p>
-            <p>Phone number: @Model.PhoneNumber</p>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <p><b>Located in:</b><br />@Model.Town.Name, @Model.Address</p>
+                </div>
+                <div class="col-4 text-center">
+                    <p><b>Phone number:</b><br /> @Model.PhoneNumber</p>
+                </div>
+                <div class="col-4 text-center">
+                    <p><b>Open hours:</b><br /> @Model.OpenHour.Hour.00 - @Model.CloseHour.Hour.00</p>
+                </div>
+            </div>
         </div>
         <div class="col-12 text-center">
             <img class="card-img"

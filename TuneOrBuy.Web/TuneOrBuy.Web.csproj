@@ -22,4 +22,8 @@
     <ProjectReference Include="..\TuneOrBuy.Services\TuneOrBuy.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Models\" />
+  </ItemGroup>
+
 </Project>
