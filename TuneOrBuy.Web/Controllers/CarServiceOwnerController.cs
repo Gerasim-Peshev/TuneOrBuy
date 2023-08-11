@@ -31,7 +31,7 @@ namespace TuneOrBuy.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Become()
         {
-            if (await UserIsCarServiceOwner() == true || await sellerService.GetSeller(UserId()) != null)
+            if (await UserIsCarServiceOwner() == false && await sellerService.UserIsSeller(UserId()) == false)
             {
                 return RedirectToAction("All", "CarService");
             }
@@ -42,7 +42,7 @@ namespace TuneOrBuy.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Become(BecomeCarServiceOwnerViewModel carServiceOwnerToBecome)
         {
-            if (await UserIsCarServiceOwner() == true || await sellerService.GetSeller(UserId()) != null)
+            if (await UserIsCarServiceOwner() == false && await sellerService.UserIsSeller(UserId()) == false)
             {
                 return RedirectToAction("All", "CarService");
             }
@@ -67,6 +67,20 @@ namespace TuneOrBuy.Web.Controllers
             await carServiceOwnerService.CreateCarServiceOwner(userId, carServiceOwnerToBecome.PhoneNumber);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> CarServicesForManage()
+        {
+            if (await UserIsCarServiceOwner() == false && await sellerService.UserIsSeller(UserId()) == false)
+            {
+                return RedirectToAction("All", "CarService");
+            }
+
+            var userId = UserId();
+
+            var carsForSell = await carServiceOwnerService.GetAllCarServicesForManage(userId);
+
+            return View(carsForSell);
         }
     }
 }

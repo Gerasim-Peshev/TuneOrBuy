@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TuneOrBuy.Data.Models;
+﻿using TuneOrBuy.Data.Models;
+using TuneOrBuy.Services.CarServices.Models;
 
 namespace TuneOrBuy.Services.Contracts
 {
@@ -17,5 +13,6 @@ namespace TuneOrBuy.Services.Contracts
         Task<bool> ExistsByPhoneNumber(string phoneNumber);
         Task CreateCarServiceOwner(string userId, string phoneNumber);
         Task<Buyer> GetBuyerAsync(string userId);
+        Task<List<CarServiceServiceModel>> GetAllCarServicesForManage(string userId);
     }
 }

@@ -1,0 +1,50 @@
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using TuneOrBuy.Services.Contracts
+@using static TuneOrBuy.Web.Areas.Admin.AdminConstants;
+@inject ICarServiceOwnerService carServiceOwnerService;
+@inject ICarServiceService carServiceService;
+@model CarServiceServiceModel
+
+<div class="col-md-4">
+    <div class="card mb-3">
+        <img class="card-img-top" src="@Model.ImageUrl" alt="CarService Image">
+        <div class="card-body text-center">
+            <h4>@Model.Name</h4>
+            <h6>@Model.Town.Name</h6>
+            <h6>Location: @Model.Address</h6>
+            <br />
+            <a asp-controller="CarService" asp-action="CarServiceDetails" asp-route-carServiceId="@Model.Id"
+               class="btn btn-success">Details</a>
+            @if (this.User.Identity.IsAuthenticated)
+            {
+                var contains = await carServiceService.ContainsCarServiceAsync(@Model.Id, User.FindFirstValue(ClaimTypes.NameIdentifier));
+                if (contains.Item1)
+                {
+                    <a asp-controller="CarService" asp-action="CarServiceToFavourite" asp-route-carServiceId="@Model.Id">❤</a>
+                }
+                else if (!contains.Item1)
+                {
+                    <a asp-controller="CarService" asp-action="CarServiceToFavourite" asp-route-carServiceId="@Model.Id">♡</a>
+                }
+
+                var UserIsSeller = await carServiceOwnerService
+                .UserIsCarServiceOwner(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                if (UserIsSeller || User.IsInRole(AdministratorRoleName))
+                {
+                    var GetUser = await carServiceOwnerService.GetCarServiceOwner(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+
+                    if ((UserIsSeller && Model.CarServiceOwnerId.ToLower() == GetUser.Id.ToString().ToLower()) || User.IsInRole(AdministratorRoleName))
+                    {
+                        <a asp-controller="CarService" asp-action="EditCarService" asp-route-carServiceId="@Model.Id"
+                           class="btn btn-warning">Edit</a>
+                        <a asp-controller="CarService" asp-action="DeleteCarService" asp-route-carServiceId="@Model.Id"
+                           class="btn btn-danger">Delete</a>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
