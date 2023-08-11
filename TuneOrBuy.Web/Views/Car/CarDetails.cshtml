@@ -4,31 +4,45 @@
     ViewBag.Title = "Car Details";
 }
 <h2 class="text-center">@ViewBag.Title</h2>
-<hr />
 <div class="container" style="display:inline">
     <div class="row">
         <div class="col-12 text-center">
             <h1>@Model.Manufacturer @Model.Brand</h1>
-            <p>Year: @Model.Year.Year, First Registration: @Model.FirstRegistrationYear.Year, Body Type: @Model.BodyType</p>
-            <p>Fuel: @Model.Fuel, Traveled Distance: @Model.TraveledDistance km, Gears: @Model.GearType, Horse Power: @Model.HorsePower, Number of Doors: @Model.NumberOfDoors, Number of Seats: @Model.NumberOfSeats, Color: @Model.Color</p>
-            @if (@Model.VIN != null)
-            {
-                <p>VIN: @Model.VIN</p>
-            }
-            @if (@Model.ServiceHistory)
-            {
-                <p>Service History: ✓</p>
-            }
-            else
-            {
-                <p>Service History: X</p>
-            }
+            <p></p>
+            <div class="row">
+                <div class="col-1"><b>Year:</b><br />@Model.Year.Year</div>
+                <div class="col-1"><b>First Registration:</b><br />@Model.FirstRegistrationYear.Year</div>
+                <div class="col-1"><b>Body Type:</b><br />@Model.BodyType</div>
+                <div class="col-1"><b>Fuel:</b><br />@Model.Fuel</div>
+                <div class="col-1"><b>Traveled Distance:</b><br />@Model.TraveledDistance km</div>
+                <div class="col-1"><b>Gears:</b><br />@Model.GearType</div>
+                <div class="col-1"><b>Horse Power:</b><br />@Model.HorsePower</div>
+                <div class="col-1"><b>Number of Doors:</b><br />@Model.NumberOfDoors</div>
+                <div class="col-1"><b>Number of Seats:</b><br />@Model.NumberOfSeats</div>
+                <div class="col-1"><b>Color:</b><br />@Model.Color</div>
+                <div class="col-1"><b>Gears:</b><br />@Model.GearType</div>
+
+
+                @if (@Model.VIN != null)
+                {
+                    <div class="col1"><b>VIN:</b><br />@Model.VIN</div>
+                }
+                @if (@Model.ServiceHistory)
+                {
+                    <div class="col-1"><b>Service History:</b><br />✓</div>
+                }
+                else
+                {
+                    <div class="col-1"><b>Service History:</b><br />X</div>
+                }
+            </div>
         </div>
+        <p></p>
         <div class="col-12 text-center">
             <img class="card-img"
                  src="@Model.ImageUrl" alt="Car Image">
         </div>
-        <div class="col-12 row text-center">
+        <div class="row text-center">
             <div class="col-12">
                 <p>Equipments</p>
             </div>
@@ -46,15 +60,24 @@
                 <p>No Equipments</p>
             }
         </div>
+        <p></p>
         <div class="card col-12 border-0 text-center">
-            <p>Located in: <b>@Model.Seller.Town.Name</b></p>
-            <p>
-                Price:
-                <b>@String.Format("{0:f2}", Model.Price) BGN</b>
-            </p>
-            <p>@Model.Description</p>
-            <p></p>
+            <div class="row">
+                <div class="col-5"></div>
+                <div class="col-2 text-center"><b>Located in:</b><br />@Model.Seller.Town.Name</div>
+                <div class="col-5"></div>
+                <p></p>
+                <div class="col-5"></div>
+                <div class="col-2 text-center">
+                    <b>Price:</b>
+                    <br />@String.Format("{0:f2}", Model.Price) BGN
+                </div>
+                <div class="col-5"></div>
+                <p></p>
+                <div class="col-12"><b>Description</b><br />@Model.Description</div>
+            </div>
         </div>
+        <p></p>
         <div class="col-5"></div>
         <div class="card col-2">
             <div class="card-body">

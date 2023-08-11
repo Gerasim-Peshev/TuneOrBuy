@@ -4,7 +4,6 @@
     ViewBag.Title = "Part Details";
 }
 <h2 class="text-center">@ViewBag.Title</h2>
-<hr />
 <div class="container" style="display:inline">
     <div class="row">
         <div class="col-12 text-center">
@@ -16,15 +15,24 @@
             <img class="card-img"
                  src="@Model.ImageUrl" alt="Part Image">
         </div>
+        <p></p>
         <div class="card col-12 border-0 text-center">
-            <p>Located in: <b>@Model.Seller.Town.Name</b></p>
-            <p>
-                Price:
-                <b>@String.Format("{0:f2}", Model.Price) BGN</b>
-            </p>
-            <p>@Model.Description</p>
-            <p></p>
+            <div class="row">
+                <div class="col-5"></div>
+                <div class="col-2 text-center"><b>Located in:</b> <br />@Model.Seller.Town.Name</div>
+                <div class="col-5"></div>
+                <p></p>
+                <div class="col-5"></div>
+                <div class="col-2 text-center">
+                    <b>Price:</b>
+                    <br />@String.Format("{0:f2}", Model.Price) BGN
+                </div>
+                <div class="col-5"></div>
+                <p></p>
+                <div class="col-12">@Model.Description</div>
+            </div>
         </div>
+        <p></p>
         <div class="col-5"></div>
         <div class="card col-2">
             <div class="card-body">
